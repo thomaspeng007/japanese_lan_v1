@@ -1,0 +1,67 @@
+<?php
+/*
+ * http://fishpig.co.uk - Magento Tutorials
+ *
+ * Display top level categories and
+ * subcategories of the current category
+ *
+**/
+?>
+<?php $_helper = Mage::helper('catalog/category') ?>
+<?php $_categories = $_helper->getStoreCategories() ?>
+<?php $currentCategory = Mage::registry('current_category') ?>
+<?php $_category = Mage::getModel('catalog/category')->load($currentCategory->getId()) ?>
+<?php $_subcategories = $_category->getChildrenCategories() ?>
+<?php $currentProduct = Mage::registry('current_product')->getId() ?>
+
+<div class="main01">
+    <?php if (count($_subcategories) > 0): ?>
+        <?php $i = 0; ?>       
+        <?php foreach($_subcategories as $_subcategory): ?>
+                
+	        <div class="main01_1"><?php echo $_subcategory->getName()?></div>
+		        <div class="main01_2">
+			        <ul>
+				        <?php  $products = Mage::getModel('catalog/product')->getCollection() 
+                                              ->addCategoryFilter($_subcategory)
+                                              ->addAttributeToSelect(array('id', 'name')); ?>
+                                              
+                        <?php   foreach ($products as $product): ?> 
+                                   <?php $i++;?>
+                                    <li <?php if ($currentProduct==$product->getId()){ echo 'class="list_active"'; }?> ><a href="<?php echo $product->getProductUrl()?>"><?php echo $i ;?></a></li>
+                        <?php   endforeach; unset($i);   ?>                      
+			         </ul>
+		        </div>
+		        <?php break;?>
+		<?php endforeach; ?>
+	<?php endif; ?>
+	
+	
+	<!-- for mobile navigation -->
+	 <?php if (count($_subcategories) > 0): ?>
+	    <?php $i = 0; ?>
+        <?php foreach($_subcategories as $_subcategory): ?>
+		<div class="main01_1_s"><?php echo $_subcategory->getName()?></div>
+		<div class="main01_2_s">
+		    
+			  <ul>
+				        <?php  $products = Mage::getModel('catalog/product')->getCollection() 
+                                              ->addCategoryFilter($_subcategory)
+                                              ->addAttributeToSelect(array('id', 'name')); ?>
+                                              
+                        <?php   foreach ($products as $product): ?> 
+                                   <?php $i++;?>
+                        			<li <?php if ($currentProduct==$product->getId()){ echo 'class="list_active"'; }?> ><a href="<?php echo $product->getProductUrl()?>"><?php echo $i ;?></a></li>
+                        <?php   endforeach; ?>                      
+			         </ul>
+			      
+			   <?php $i++; ?>      
+		   </div>
+		        
+		        <?php break;?>
+		<?php endforeach; ?>
+	<?php endif; ?>
+	
+	
+</div><!--End main01-->
+

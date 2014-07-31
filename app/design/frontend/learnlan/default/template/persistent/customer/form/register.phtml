@@ -1,0 +1,81 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2013 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php
+/**
+ * Create account form template
+ *
+ * @see app/design/frontend/base/default/template/customer/form/register.phtml
+ */
+/** @var $this Mage_Customer_Block_Form_Register */
+?>
+
+<div id="main01">
+	<div id="main_center">
+		<div id="signup">
+			<h3 class="subtitle"><img src="<?php echo $this->getSkinUrl('images/icn_circle.png');?>" />新規登録</h3>	
+			 <?php echo $this->getChildHtml('form_fields_before')?>
+             <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+            <form action="<?php echo $this->getPostActionUrl() ?>" method="post" id="form-validate" class="signup_form">
+				<dl id="signup_context">
+				    <input type="hidden" name="success_url" value="<?php echo $this->getSuccessUrl() ?>" />
+                    <input type="hidden" name="error_url" value="<?php echo $this->getErrorUrl() ?>" />
+					<dt>
+						<select class="entry_select">
+							<option value="">あなたの中国語レベルを選んで下さい</option>
+							<option value="">入門</option>
+						</select>
+					</dt>
+					<dd class="entry_comment"><span>※必須</span></dd>
+					                             
+					     
+					<dt><input type="text" name="email" id="email_address" class="entry_text" placeholder="メールアドレス" value="<?php echo $this->escapeHtml($this->getFormData()->getEmail()) ?>" title="<?php echo $this->__('Email Address') ?>" class="input-text validate-email required-entry" /></dt>
+					<dd class="entry_comment"><span>※必須、半角英数字、アンダースコア（_）のみ</span></dd>					 
+					<dt><input type="password" name="password" id="password" title="<?php echo $this->__('Password') ?>" class="input-text required-entry validate-password" class="entry_text" placeholder="パスワード"   /></dt>
+					<dd class="entry_comment"><span>※必須、パスワードは6文字以上</span></dd>
+				</dl>
+            	<button type="submit" title="<?php echo $this->__('Submit') ?>" class="button" id="signup_submit"><span><span><?php echo $this->__('登録する') ?></span></span></button>
+				<p class="required"><?php //echo $this->__('* Required Fields') ?></p>
+            	<p class="back-link"><a href="<?php echo $this->escapeUrl($this->getBackUrl()) ?>" class="back-link"><small>&laquo; </small><?php echo $this->__('戻る') ?></a></p>
+        </div>
+        <?php if (Mage::helper('checkout')->isContextCheckout()): ?>
+            <input name="context" type="hidden" value="checkout" />
+        <?php endif; ?>
+			</form>
+		</div>
+	</div>
+	
+	<script type="text/javascript">
+    //<![CDATA[
+        var dataForm = new VarienForm('form-validate', true);
+        <?php if($this->getShowAddressFields()): ?>
+        new RegionUpdater('country', 'region', 'region_id', <?php echo $this->helper('directory')->getRegionJson() ?>, undefined, 'zip');
+        <?php endif; ?>
+    //]]>
+    </script>
+</div><!--End main01-->
+
+

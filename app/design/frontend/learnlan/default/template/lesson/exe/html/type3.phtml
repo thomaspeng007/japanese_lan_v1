@@ -1,0 +1,166 @@
+<?php
+$lessonId = $this->getProductId();
+// Initialise ExeType model
+$exeM = Mage::getModel('lesson/jpexetype');
+// Set lesson id
+$exeM->setLessonId($this->getProductId());
+// Return type 1
+$type3 = $exeM->getType(3);
+//var_dump($type3);
+$countType3 = count($type3);
+//$countType3 = 1;
+
+?> 
+<script>
+$( document ).ready(function() {
+	
+	var sinoApp = sinoApp || {};
+
+    // Flashcard will be the default exercise, other exercise will 
+    // have different names
+    sinoApp.exe_grammar_type3 = function() {
+
+    	// Difine next serial if any
+    	ens = $('.exe_next_serial');
+    	ens.click(function (e) {
+        	// serial is a string before convert to number
+    		serial = $(this).attr('serial').trim();
+  
+    		$('#exe_type_serial_' + serial).hide(); 
+       	    $('#exe_type_serial_' + serial).html(''); 
+            $('.exe_next_serial').hide(); 
+            
+       	   // !important Convert string serial to number with parseInt function
+       	   next = parseInt(serial) + 1;
+       	   $('#exe_type_serial_' + next).show(); 
+
+            
+    	});
+    	// Count how many serial number of type3 
+    	<?php echo 'var countSerial = '.json_encode($countType3).';'; ?>
+ 
+        ifc =  $('#exe_grammar_frame_container'); 
+        image_frame = $('.exe_grammar_frame');  
+        
+        image_frame.click(function (e) {     
+
+        	 serial = $(this).attr('serial').trim();
+             qValue = $('#exe_grammar_question_keyword_' + serial).attr('answer').trim();
+            
+              // find out question value
+             //qValue = $('#exe_grammar_question_keyword').attr('answer').trim();
+           
+              li = $(this).parent();
+              // find out selected value
+              value = $(this).attr('answer').trim();
+              // get serial number
+              
+              // compare question value and answer value, if equal change
+              // next question value
+              if(value==qValue){
+                  
+            	  keyword = $('#exe_grammar_question_keyword_' + serial);
+                  keyword.removeClass('exe_grammar_question_keyword')
+                  keyword.text(qValue); 
+                  keyword.addClass('exe_grammar_question_keyword_underline')
+                         .addClass('exe_grammar_frame_wrapper_green');
+                  setTimeout(function(){
+                    keyword.removeClass("exe_grammar_frame_wrapper_green");}, 1000);
+
+                 // Empty serial number div and display the next if availalbe
+                 if(serial<countSerial) {
+   
+                     $('#exe_next_serial_' + serial).show(); 
+                     
+                 } else { // if it's last srial number then Go to next type
+                	
+                     $('.exe_next_serial_container').hide();
+                     $('.exe_continue_next').show(); 
+                 }
+                  
+              } else {
+                   // incorrect answer
+                   // First to update the score by using ajax to update session
+               score = 1;
+               var dataString = 'score=' + score;
+               $.ajax({
+                        type: "POST",
+                        url: '<?php echo $this->getUrl("chinese-lesson/index/saveScore") ?>',
+                        data: dataString,
+                        cache: false,
+                        //success: function(response) { alert('ok'); }
+               });
+               
+                   li.addClass("exe_grammar_frame_wrapper_red");
+                   li.animate({left:'-10px'},100)
+                     .animate({left:'10px'},100)
+                     .animate({left:'0px'},100);
+                   setTimeout(function(){
+                   li.removeClass("exe_grammar_frame_wrapper_red");}, 500);      
+              }            
+       }); // finish click event  
+    };
+     
+    sinoApp.exe_grammar_type3();
+    
+
+});
+
+</script>
+
+<div id="exe_container">
+    <p class="exe_type_title"><?php echo $exeM->getTypeTitle(3); ?></p><br>
+    <?php for($i=0; $i<$countType3; $i++) { 
+
+	      $serialNumber = trim($i + 1); 
+	      $type = $type3[$i];
+          $source  = $exeM->convertTextSource($type['source']);
+          $keywordArr = $exeM->convertTextSource($type['exe_type3'], 'array');
+          $keyword = $keywordArr[0];
+          $exeGrammarQuestion = str_replace($keyword, 
+                                            '<span id="exe_grammar_question_keyword_'.$serialNumber.'"
+                                                   class="exe_grammar_question_keyword" 
+                                                   answer='.$keyword.'></span>',
+                                            $source);	
+   
+    ?>
+    <div id="exe_type_serial_<?php echo $serialNumber; ?>" 
+               <?php if($serialNumber!=1) { echo "style='display:none'"; } ?> >                                  
+    <div id="exe_grammar_frame_container" class="exe_grammar_frame_container">
+        <div id="exe_grammar_question">
+           <p class="exe_grammar_question_p">
+              <?php echo $exeGrammarQuestion; ?>
+           </p>
+            
+        </div>
+        <hr style="size:30px" class="exe_grammar_separator"></hr>  
+       <div class="exe_grammar_answer_container">   
+           <ul> 
+               <?php
+               shuffle($keywordArr);
+               foreach ($keywordArr as $keywordV) { ?>
+    	       <li class="exe_grammar_frame_wrapper">        
+                  <div class="exe_grammar_frame" 
+                       serial="<?php echo $serialNumber; ?>" 
+                       answer="<?php echo $keywordV; ?>"><?php echo $keywordV; ?></div>  
+               </li> 
+               <?php } ?>
+           </ul>
+        </div>         
+    </div>   
+    
+    
+    
+    </div> <!-- finsih exe_type_serial Number --> 
+    <div class="exe_next_serial_container">
+        <div style="display:none;" id="exe_next_serial_<?php echo $serialNumber; ?>" class="exe_next_serial" serial="<?php echo $serialNumber; ?>"  >
+           <button>
+               <img src="<?php echo $this->getSkinUrl('images/exe_next_btn.gif');?>" alt="Submit"
+                  onmouseover="this.src='<?php echo $this->getSkinUrl('images/exe_next_btn_hover.gif');?>';"
+                  onmouseout="this.src='<?php echo $this->getSkinUrl('images/exe_next_btn.gif');?>';">
+           </button>
+        </div>
+    </div>
+    <?php  } ?>
+    
+</div><!-- finish exe_contaier -->    

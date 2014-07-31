@@ -1,0 +1,21 @@
+<div id="main">
+	<h3 class="subtitle">ダッシュボード</h3>
+	
+	<div class="tabs">
+		<ul class="dashboard_tabs">
+			<li style="z-index:9;"><a href="#" title="" rel="tab-1" id="tabs_dia" class="active"><span>学習中</span></a></li>
+			<li style="z-index:8;"><a href="#" title="" rel="tab-2" id="tabs_voc"><span>お気に入り</span></a></li>
+		</ul class="dashboard_tabs">
+	</div><!--End tabs-->
+	<?php echo $this->getChildHtml('right.reports.product.viewed') ?>	
+	<?php 
+	$lastViewed = $this->getChildHtml('right.reports.product.viewed');
+	if(empty($lastViewed)): ?>
+	<div class="tab-panel">
+		<div class="tab-content" id="tab-default">
+			<h1>まだ学習中の課文はありません</h1>
+		</div>
+	</div>
+	<?php endif;?>
+	
+</div><!--End main-->

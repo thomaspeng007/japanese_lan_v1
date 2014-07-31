@@ -1,0 +1,263 @@
+<layout version="0.1.0">
+<!--
+Layout for customer login page
+-->
+    <!-- 
+    Below code modified by LearnLan
+    --> 
+    <customer_account_login translate="label">
+        <label>Customer Account Login Form</label>
+        <update handle="learnlan_one_columns"/>
+        <!-- Mage_Customer -->
+        <remove name="right"/>
+        <remove name="left"/>
+        <remove name="home-content"/>
+
+        <reference name="root">
+            <action method="setTemplate"><template>page/learnlan-1column.phtml</template></action>
+        </reference>
+        <reference name="head">
+            <action method="addItem"><type>skin_js</type><name>js/jquery.heightLine.js</name></action>
+            <action method="addItem"><type>skin_js</type><name>js/footerFixed.js</name></action>
+        </reference>   
+    </customer_account_login>
+    
+<!--
+New customer registration
+-->
+    <!-- 
+    Below code modified by LearnLan
+    --> 
+    <customer_account_create translate="label">
+        <label>Customer Account Registration Form</label>
+        <update handle="learnlan_one_columns"/>
+        <!-- Mage_Customer -->
+        <remove name="right"/>
+        <remove name="left"/>
+        <remove name="home-content"/>
+
+        <reference name="root">
+            <action method="setTemplate"><template>page/learnlan-1column.phtml</template></action>
+        </reference>
+        <reference name="head">
+            <action method="addItem"><type>skin_js</type><name>js/jquery.heightLine.js</name></action>
+            <action method="addItem"><type>skin_js</type><name>js/footerFixed.js</name></action>
+        </reference>   
+    </customer_account_create>
+    
+<!--
+Layout for customer forgotpassword page
+-->
+    
+    <customer_account_forgotpassword translate="label">
+        <label>Customer Forgot Password Form</label>
+        <update handle="learnlan_one_columns"/>
+        <remove name="right"/>
+        <remove name="left"/>
+        <remove name="home-content"/>
+
+        <reference name="root">
+            <action method="setTemplate"><template>page/learnlan-1column.phtml</template></action>
+            <action method="setHeaderTitle" translate="title" module="customer"><title>Password forgotten</title></action>
+        </reference>
+        <reference name="head">
+            <action method="addItem"><type>skin_js</type><name>js/jquery.heightLine.js</name></action>
+            <action method="addItem"><type>skin_js</type><name>js/footerFixed.js</name></action>
+            <action method="setTitle" translate="title" module="customer"><title>Forgot Your Password</title></action>
+        </reference>      
+    </customer_account_forgotpassword>
+    
+<!--
+Layout for customer log out page
+-->
+
+    <customer_account_logoutsuccess translate="label">
+        <label>Customer Account Logout Success</label>
+        <update handle="customer_account_logoutsuccess"/> 
+        <update handle="learnlan_one_columns"/>
+        <remove name="right"/>
+        <remove name="left"/>
+        <remove name="home-content"/>
+
+        <reference name="root">
+            <action method="setTemplate"><template>page/learnlan-1column.phtml</template></action>
+        </reference>   
+    </customer_account_logoutsuccess>
+    
+<!--
+Layout for customer account edit page
+-->
+    
+    <customer_account_edit translate="label">
+        <label>Customer Account Edit Form</label>
+        <update handle="page"/>
+        <remove name="breadcrumbs" />
+        <remove name="customer_account_navigation"/>
+        <remove name="cart_sidebar"/>
+        <remove name="catalog.compare.sidebar" />
+        <reference name="root">
+            <action method="setTemplate"><template>page/learnlan-2columns.phtml</template></action>
+            <action method="setHeaderTitle" translate="title" module="customer"><title>Edit Account Info</title></action>
+        </reference>
+        <reference name="my.account.wrapper">
+            <block type="customer/form_edit" name="customer_edit" template="customer/form/edit.phtml"/>
+        </reference>
+
+        <reference name="left">
+          <action method="unsetChild"><name>left.permanent.callout</name></action>
+        </reference>
+    </customer_account_edit>
+
+<!--
+Customer account home dashboard layout
+-->
+
+    <customer_account_index translate="label">
+        <label>Customer My Account Dashboard</label>
+        <update handle="page"/>
+        <remove name="breadcrumbs" />
+        <remove name="customer_account_navigation"/>
+        <remove name="cart_sidebar"/>
+        <remove name="catalog.compare.sidebar" />
+        <!-- Mage_Customer -->
+         <reference name="root">
+            <action method="setTemplate"><template>page/learnlan-2columns.phtml</template></action>
+        </reference>
+        <reference name="my.account.wrapper">
+            <block type="customer/account_dashboard" name="customer_account_dashboard" template="customer/account/dashboard.phtml">
+                <block type="reports/product_viewed" name="right.reports.product.viewed" template="reports/product_viewed.phtml" />
+                <block type="customer/account_dashboard_hello" name="customer_account_dashboard_hello" as="hello" template="customer/account/dashboard/hello.phtml"/>
+                <block type="core/template" name="customer_account_dashboard_top" as="top" />
+                <block type="customer/account_dashboard_info" name="customer_account_dashboard_info" as="info" template="customer/account/dashboard/info.phtml"/>
+                <block type="customer/account_dashboard_newsletter" name="customer_account_dashboard_newsletter" as="newsletter" template="customer/account/dashboard/newsletter.phtml"/>
+                <block type="customer/account_dashboard_address" name="customer_account_dashboard_address" as="address" template="customer/account/dashboard/address.phtml"/>
+            </block>
+        </reference>
+
+    </customer_account_index>
+
+
+<!--
+Category layered navigation layout
+-->
+
+    <catalog_category_layered translate="label">
+        <label>Catalog Category (Anchor)</label>
+        <!-- 
+        Below code modified by LearnLan
+        --> 
+        <!-- Mage_Catalog -->
+      
+        <remove name="catalog.leftnav" />
+        <remove name="category.products" />
+        <remove name="breadcrumbs" />
+        
+        <reference name="root">
+            <action method="setTemplate"><template>page/learnlan-2columns.phtml</template></action>
+        </reference>
+        <reference name="head">
+            <!--  
+            <action method="addJs"><script>varien/product.js</script></action>
+            <action method="addJs"><script>varien/configurable.js</script></action>
+            -->
+            <!-- <action method="addItem"><type>js_css</type><name>calendar/calendar-win2k-1.css</name><params/><if/><condition>can_load_calendar_js</condition></action>-->
+            <!-- <action method="addItem"><type>js</type><name>calendar/calendar.js</name><params/><if/><condition>can_load_calendar_js</condition></action>-->
+            <!-- <action method="addItem"><type>js</type><name>calendar/calendar-setup.js</name><params/><if/><condition>can_load_calendar_js</condition></action>-->
+        </reference>
+        <reference name="content">
+            <block type="page/html" name="category_content" as="category_content" translate="label" template="catalog/navigation/category-content.phtml">
+                <label>Main Content Area</label>
+            </block>
+        </reference>
+        <!-- 
+        Finish code modified by LearnLan
+        -->
+        
+    </catalog_category_layered>
+    
+        
+<!--
+Product view Modified by LearnLan
+-->
+
+    <catalog_product_view translate="label">
+        <label>Catalog Product View (Any)</label>   
+        <!-- 
+        Below code modified by LearnLan
+        -->
+        <remove name="right"/> 
+        <!-- we can't move this block as breadcrumbs has dependency on it, the workaround is to empty its template
+        <remove name="product.info"/> 
+        -->
+        <!-- Mage_Catalog -->
+        <reference name="root">
+            <action method="setTemplate"><template>page/learnlan-2columns.phtml</template></action>
+            <block type="catalog/navigation" name="lan.top-productmenu" as="lan.top-productmenu" translate="label" template="catalog/navigation/top-productmenu.phtml">
+                <label>Top Product Menu</label>
+            </block>
+            
+        </reference>
+        <reference name="head">
+            <action method="removeItem"><type>js_css</type><name>calendar/calendar-win2k-1.css</name></action>
+            <action method="removeItem"><type>js</type><name>varien/weee.js</name></action>
+            <action method="removeItem"><type>js</type><name>calendar/calendar.js</name></action>
+            <action method="removeItem"><type>js</type><name>calendar/calendar-setup.js</name></action>
+            <action method="removeItem"><type>js</type><name>varien/product.js</name></action>
+            <action method="removeItem"><type>js</type><name>varien/configurable.js</name></action>
+            <!--  
+            <action method="addJs"><script>varien/product.js</script></action>
+            <action method="addJs"><script>varien/configurable.js</script></action>
+            -->
+            <!-- <action method="addItem"><type>js_css</type><name>calendar/calendar-win2k-1.css</name><params/><if/><condition>can_load_calendar_js</condition></action>-->
+            <!-- <action method="addItem"><type>js</type><name>calendar/calendar.js</name><params/><if/><condition>can_load_calendar_js</condition></action>-->
+            <!-- <action method="addItem"><type>js</type><name>calendar/calendar-setup.js</name><params/><if/><condition>can_load_calendar_js</condition></action>-->
+        </reference>
+        <reference name="left">
+            <block type="catalog/product_view" name="lan.product.info" template="catalog/product/lan-info.phtml">
+                <label>Left Product Information</label>
+            </block>
+        </reference>
+        <reference name="root" before="content">
+            <block type="catalog/product_view" name="lan.pagenav" template="catalog/product/pagenav.phtml">
+                <label>Left Product Information</label>
+            </block>
+        </reference>
+        
+        <!-- add product review module  -->
+       
+      
+         <reference name="product.info">
+            
+            <block type="review/product_view_list" name="product.info.product_additional_data" as="product_review" template="review/product/view/list.phtml">
+            <block type="review/form" name="product.review.form" as="review_form"/></block>
+    
+         
+        </reference>   
+     
+      
+        <!-- 
+        Finish code modified by LearnLan
+        -->
+    </catalog_product_view>
+  
+<!--
+Contact form based on login or logout. At the moment the tag of login/logout doesn't work for some
+reason, need for find a solution, right now make it only login user available
+-->
+
+    <contacts_index_index translate="label">
+        <label>Contact Us Form</label>
+        <update handle="learnlan_one_columns"/>
+        <remove name="home-content"/>
+        <reference name="head">
+            <action method="setTitle" translate="title" module="contacts"><title>Contact Us</title></action>
+        </reference>
+        <reference name="root">
+            <action method="setTemplate"><template>page/learnlan-1column.phtml</template></action>
+            <action method="setHeaderTitle" translate="title" module="contacts"><title>Contact Us</title></action>
+        </reference>
+        
+    </contacts_index_index>
+  
+
+</layout>

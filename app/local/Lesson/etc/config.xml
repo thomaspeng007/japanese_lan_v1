@@ -1,0 +1,116 @@
+<config>    
+    <modules>
+        <Chinese_Lesson>
+            <version>0.1.0</version>
+        </Chinese_Lesson>
+    </modules>
+    <!-- this is frontend controller -->
+    <frontend>
+      <routers>
+        <lesson>
+            <use>standard</use>
+            <args>
+                <module>Chinese_Lesson</module>
+                <frontName>chinese-lesson</frontName>
+            </args>
+        </lesson>
+      </routers>
+    </frontend> 
+    
+    <!-- this is backend admin controller -->
+     <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <chinese_lesson before="Mage_Adminhtml">Chinese_Lesson_Adminhtml</chinese_lesson>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
+    <global>
+    <!-- ... -->
+        <models>
+           <lesson>
+              <class>Chinese_Lesson_Model</class>
+              <!--
+               need to create our own resource, cant just
+               use core_resource
+               -->
+               <resourceModel>lesson_resource</resourceModel>
+            </lesson>
+            <lesson_resource>
+                   <class>Chinese_Lesson_Model_Resource</class>
+                   <entities>
+                       <jpdialogue>
+                           <table>jp_dialogue</table>
+                       </jpdialogue>
+                       <jpvocabulary>
+                           <table>jp_vocabulary</table>
+                       </jpvocabulary>
+                       <jpproductlesson>
+                           <table>jp_productlesson</table>
+                       </jpproductlesson>
+                       <jpexetype>
+                           <table>jp_exe_type</table>
+                       </jpexetype>
+                   </entities>
+             </lesson_resource>
+        </models>
+    <!-- ... -->
+         <blocks>
+            <lesson>
+                <class>Chinese_Lesson_Block</class>
+            </lesson>
+         </blocks>
+    <!-- helpers -->    
+        <helpers>
+            <lesson>
+                <class>Chinese_Lesson_Helper</class>
+            </lesson>
+        </helpers>
+    </global> 
+     <adminhtml>
+        <layout>
+            <updates>
+                <lesson>
+                    <file>lesson.xml</file>
+                </lesson>
+            </updates>
+        </layout>
+        <!-- The <acl> section is for access control. Here we define the pieces where access can be controlled within a role. -->
+        <acl>
+            <resources>
+                <admin>
+                    <children>
+                        <lesson>
+                            <title>Chinese</title>
+                            <children>
+                                <productlesson translate="title" module="lesson">
+                                    <title>Lesson</title>
+                                </productlesson>
+                            </children>
+                            <children>
+                                <importlesson translate="title" module="lesson">
+                                    <title>Import Lesson</title>
+                                </importlesson>
+                            </children>
+                        </lesson>
+                    </children>
+                </admin>
+            </resources>
+        </acl>
+        <events>
+            <catalog_product_save_after>
+                <observers>
+                    <chinese_save_product_data>
+                        <type>singleton</type>
+                        <class>lesson/observer</class>
+                        <method>saveProductTabData</method>
+                    </chinese_save_product_data>
+                </observers>
+            </catalog_product_save_after>
+        </events>
+    </adminhtml>
+</config>  

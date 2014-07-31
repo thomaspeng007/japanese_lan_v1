@@ -1,0 +1,54 @@
+<?php 
+/**
+ * As homepage, contacts, page404 choose one-column it must use one header otherwise two headers will overlap.
+ * Use homepage header for all the three pages
+ */
+$contacts = Mage::app()->getFrontController()->getRequest()->getModuleName();
+$page404 = Mage::getSingleton('cms/page')->getIdentifier();
+$privacy = Mage::getSingleton('cms/page')->getIdentifier();
+$terms   = Mage::getSingleton('cms/page')->getIdentifier();
+$tokusyo = Mage::getSingleton('cms/page')->getIdentifier();
+$staff   = Mage::getSingleton('cms/page')->getIdentifier();
+?>
+<?php if($this->helper('customer')->isLoggedIn() && !$this->getIsHomePage() && $contacts!='contacts' && $page404!='no-route' && $privacy!='privacy'&& $terms!='terms' && $tokusyo!='tokusyo' && $staff!='staff'):?>
+<div id="header-menu">      
+        <div id="header01">
+			<a href="<?php echo $this->getUrl(''); ?>"><img src="<?php echo $this->getSkinUrl('images/logo_panda.png');?>" /></a>
+			<ul>
+				<li><a href="<?php echo Mage::getBaseUrl().'customer/account/index';?>"><img src="<?php echo $this->getSkinUrl('images/icn_home.png');?>" /><span class="header-menu-char">ホーム</span></a></li> 
+				<li><a href="<?php echo Mage::getBaseUrl().'learnlan/beginner.html';?>"><img src="<?php echo $this->getSkinUrl('images/icn_course.png');?>" /><span class="header-menu-char">コース</span></a></li> 
+				<li><a href="<?php echo Mage::getBaseUrl().'payment';?>"><img src="<?php echo $this->getSkinUrl('images/icn_price.png');?>" /><span class="header-menu-char">お申込み</span></a></li> 
+				<!-- <li><a href=""><img src="<?php //echo $this->getSkinUrl('images/icn_help.png');?>" /><span class="header-menu-char">ヘルプ</span></a></li> -->
+			</ul>
+		</div>
+		<ul id="header02">
+			<li id="account_name"><?php if(Mage::getSingleton('customer/session')->getCustomer()->getName()){ echo Mage::getSingleton('customer/session')->getCustomer()->getName(); } else { echo Mage::getSingleton('customer/session')->getCustomer()->getEmail(); }?></li>
+			<li id="account"><a href="">アカウント<span class="triangle">▼</span></font></a>
+				<ul id="account_menu">
+					<li><a href="<?php echo $this->helper('customer')->getEditUrl();?>">設定</a></li>
+					<li><a href="<?php echo $this->helper('customer')->getLogoutUrl();?>">ログアウト</a></li>
+				</ul>
+			</li>
+		</ul> 	
+</div>	
+<?php else: ?>
+<div id="header-text"><div class=row><h1>今までになかった中国語学習サイトMMC、登録無料！</h1></div></div>
+<div id="header-menu">
+		<h1 id="header_logo"><a href="<?php echo $this->getUrl(''); ?>"><img src="<?php echo $this->getLogoSrc() ?>" alt="<?php echo $this->getLogoAlt() ?>" style="width:80px;height:28px;" /></a></h1>
+		<ul id="site_name">
+			<li id="site_name_l">モバイル中国語教室</li>
+			<li id="site_name_s"><span style="font-size:14px;color:#FF0000;font-weight:bold;text-shadow:1px 1px 0px #FFF;">M</span>obile<span style="font-size:14px;color:#395999;font-weight:bold;text-shadow:1px 1px 0px #FFF;">C</span>hinese<span style="font-size:14px;color:#72A415;font-weight:bold;text-shadow:1px 1px 0px #FFF;">C</span>lass</li>
+		</ul>
+		<?php if(!$this->helper('customer')->isLoggedIn()): ?>
+		<ul id="header_account" >
+			<li><a href="<?php echo Mage::getBaseUrl().'customer/account/login';?>"><img src="<?php echo $this->getSkinUrl('images/icn_login.png');?>" style="width:20px;height:18px;" />ログイン</a></li>
+			<li><a href="<?php echo Mage::getBaseUrl().'customer/account/create';?>"><img src="<?php echo $this->getSkinUrl('images/icn_reg.png');?>" style="width:20px;height:19px;" />新規登録</a></li>
+		</ul>
+		<?php else: ?>
+		<ul id="header-menu-right">
+			<li><a href="<?php echo Mage::getBaseUrl().'customer/account/index';?>"><img src="<?php echo $this->getSkinUrl('images/icn_home2.png');?>" style="width:24px;" /><span class="header-menu-char">ホーム</span></a></li> 
+			<li><a href="<?php echo Mage::getBaseUrl().'learnlan/beginner.html';?>"><img src="<?php echo $this->getSkinUrl('images/icn_course2.png');?>" style="width:24px;" /><span class="header-menu-char">コース</span></a></li> 
+		</ul>
+		<?php endif;?>
+	</div>
+<?php endif;?>		

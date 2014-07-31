@@ -1,0 +1,75 @@
+<layout version="0.1.0">
+<!--
+Default layout, loads most of the pages
+-->
+    <default translate="label" module="page">
+        <label>All Pages</label>
+        <block type="page/html" name="root" output="toHtml" template="page/learnlan-2columns.phtml">
+            <block type="page/html" name="auth-redirect" as="auth-redirect" template="page/html/auth-redirect.phtml"/>
+            <remove name="right"/>
+            <remove name="left.newsletter" />
+            <remove name="checkout_cart_link" />
+            <remove name="left.permanent.callout"  />
+            <block type="page/html_head" name="head" as="head">   
+                <action method="addItem"><type>skin_js</type><name>js/jquery-1.11.1.min.js</name></action> 
+                <action method="addCss"><stylesheet>css/lesson.css</stylesheet></action>
+                <action method="addCss"><stylesheet>css/exe.css</stylesheet></action>
+                <action method="addItem"><type>skin_js</type><name>js/live/prod.min.js</name></action>
+                <action method="addItem"><type>skin_js</type><name>js/generalController.js</name></action>
+                <action method="addItem"><type>skin_js</type><name>js/audioController.js</name></action>
+                <action method="addItem"><type>skin_js</type><name>js/footerFixed.js</name></action>       
+                <action method="addItem"><type>skin_js</type><name>js/jquery.heightLine.js</name></action>    
+            </block>  
+            
+            <block type="page/html_header" name="header" as="header">
+            </block>  
+             
+            <block type="page/html_breadcrumbs" name="breadcrumbs" as="breadcrumbs"/>
+            
+            <block type="core/text_list" name="left" as="left" translate="label">
+                <label>Left Column</label>
+                <block type="catalog/navigation" name="lan.sidebar" as="lan.sidebar" translate="label" template="catalog/navigation/sidebar.phtml">
+                <label>Category Sidebar</label>
+                </block>
+            </block>
+
+            <block type="core/text_list" name="content" as="content" translate="label">
+                <label>Main Content Area</label>
+            </block>
+            
+            <block type="page/html" name="dashboard_content" as="dashboard_content" translate="label" template="page/html/dashboard-content.phtml">
+                <label>Dashboard Content Area</label>
+            </block>
+            
+            <block type="page/html_footer" name="footer" as="footer" template="page/html/footer.phtml">
+                <label>Footer</label>
+            </block>
+        </block>
+      </default> 
+      <learnlan_one_columns translate="label">
+            <label>All One-Column Layout Pages</label>
+            <remove name="left"/>
+            <remove name="right"/>
+            <reference name="root">
+                <action method="setTemplate"><template>page/learnlan-1column.phtml</template></action>
+                <!-- Mark root page block that template is applied -->
+                <action method="setIsHandle"><applied>1</applied></action>
+                <reference name="head">
+                    <action method="addItem"><type>skin_js</type><name>js/jquery-1.11.1.min.js</name></action> 
+                    <action method="addCss"><stylesheet>css/index.css</stylesheet></action>
+                    <action method="addCss"><type>skin_js</type><name>js/jquery.heightLine.js</name></action>
+                    <action method="addCss"><type>skin_js</type><name>js/footerFixed.js</name></action>
+                    <action method="removeItem"><type>skin_css</type><name>css/lesson.css</name></action>
+                    <action method="removeItem"><type>skin_css</type><name>css/exe.css</name></action>
+                    <action method="removeItem"><type>skin_js</type><name>js/generalController.js</name></action>
+                    <action method="removeItem"><type>skin_js</type><name>js/audioController.js</name></action>
+                    <action method="removeItem"><type>skin_js</type><name>js/live/prod.min.js</name></action>
+                </reference>
+                <reference name="content">
+                    <block type="page/html" name="home-content" as="home-content" template="page/html/home-content-jp.phtml"></block>
+                </reference>  
+                         
+           </reference>       
+       </learnlan_one_columns>
+    
+</layout>

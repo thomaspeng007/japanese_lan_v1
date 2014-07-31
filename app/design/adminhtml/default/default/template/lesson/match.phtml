@@ -1,0 +1,72 @@
+<?php
+/**
+ * Custom Lesson and product match template
+ */
+
+// initialise productlessmon model
+$productlessonM = Mage::getModel('lesson/jpproductlesson');
+$lessonRecords = $productlessonM->getLessons();
+//print_r($lessonRecords); 
+$exeM = Mage::getModel('lesson/jpexetype');
+$exeM->getExeTypes();
+if($exeM->isExist()==TRUE) {
+	echo "<h1>lesson 27 exist</h1>";
+}
+if($exeM->isExist()==FALSE) {
+	echo "<h1>lesson NOT exist</h1>";
+}
+
+
+?>
+<h1>Lesson match with products</h1>
+<div>
+   <table border="1">
+      <tbody>
+         <tr><th>Lesson ID</th><th>Product ID</th><th>Lesson title</th></tr>
+         <?php 
+         foreach ($lessonRecords as $lessonRecord) {
+         ?>
+         <tr><td><?php echo $lessonRecord->getLesson_id(); ?></td>
+             <td><?php echo $lessonRecord->getProduct_id(); ?></td>
+             <td><?php echo $lessonRecord->getLesson_title(); ?></td>
+         </tr>      
+         <?php } ?>
+      </tbody>
+   </table>
+</div>
+
+<!-- for exe use, but only temporary -->
+
+
+
+<!-- finish of exe use -->
+
+<!-- for future use -->
+<div class="box simple_contact">
+<form id="simple_contact_form" name="simple_contact_form" action="<?php echo $this->getUrl('inchoo-simplecontact/') ?>index/sendemail" method="post">
+    <fieldset class="group-select">
+        <h4 class="legend">Inchoo_SimpleContact module sample</h4>
+        <ul>
+        <li>
+                <div class="input-box">
+                    <label for="name">Gimme your name <span class="required">*</span></label><br />
+                    <input name="name" id="name" title="Name" value="" class="required-entry input-text" type="text" />
+                </div>
+                <div class="input-box">
+                    <label for="email">And your email <span class="required">*</span></label><br />
+                    <input name="email" id="email" title="Email" value="" class="required-entry input-text validate-email" type="text" />
+                </div>
+                <div class="clear"></div>
+                <div class="input-box">
+           &nbsp;        <label for="comment">Some comment?</label><br />
+                    <textarea name="comment" id="comment" title="Comment" class="required-entry input-text" style="height:100px;" cols="50" rows="3"></textarea>
+                </div>
+                </li>
+                </ul>
+    </fieldset>
+    <div class="button-set">
+        <p class="required">* Required Fields</p>
+        <button class="form-button" type="submit"><span>Submit</span></button>
+    </div>
+</form>
+</div>

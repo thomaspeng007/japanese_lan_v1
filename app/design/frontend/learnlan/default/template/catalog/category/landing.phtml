@@ -1,0 +1,30 @@
+<h1>This the landing page</h1>
+<?php $_categories = $this->getCurrentChildCategories() ?>
+<?php $_collectionSize = $_categories->count() ?>
+<div>
+<?php $i=0; foreach ($_categories as $_category): ?>
+<?php
+$layer = Mage::getSingleton(‘catalog/layer’);
+$layer->setCurrentCategory(Mage::getModel(‘catalog/category’)->load($_category->getId()));
+$helper     = Mage::helper(‘catalog/category’);
+?>
+<div>
+<?php $_img = $this->getCurrentCategory()->getImageUrl() ?>
+<?php if($_img): ?>
+<div>
+<a href=”<?php echo $helper->getCategoryUrl($_category);?>”>
+<img src=”<?php echo $_img?>” title=”<?php echo $_category->getName() ?>”/>
+</a>
+</div>
+<?php endif; ?>
+<div>
+<a href=”<?php echo $_category->getURL() ?>” title=”<?php echo $this->htmlEscape($_category->getName()) ?>”>
+<?php echo $this->htmlEscape($_category->getName()) ?>
+</a>
+</div>
+</div>
+<?php
+$i++;
+endforeach;
+?>
+</div>

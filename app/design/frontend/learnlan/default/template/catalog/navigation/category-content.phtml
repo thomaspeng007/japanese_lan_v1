@@ -1,0 +1,83 @@
+<div id="main">
+	<h3 class="subtitle">課文一覧</h3>	
+	
+    <?php 
+    /**
+     * @todo if this is for mobile, then need to move to other template?
+     */?>
+	<!--  
+	<div class="mobile_menu">
+		<ul>
+			<li class="mobile_menu_active"><a href="#"><img src="<?php //echo $this->getSkinUrl('images/list_style.png');?>" /> 入門</a></li>
+			<li><a href="#"><img src="<?php //echo $this->getSkinUrl('images/list_style.png');?>" /> 初級</a></li>
+			<li><a href="#"><img src="<?php //echo $this->getSkinUrl('images/list_style.png');?>" /> 中級</a></li>
+			<li><a href="#"><img src="<?php //echo $this->getSkinUrl('images/list_style.png');?>" /> 高級</a></li>
+		</ul>
+	</div>
+	-->
+	
+<?php $_helper = Mage::helper('catalog/category') ?>
+<?php $_categories = $_helper->getStoreCategories() ?>
+<?php $currentCategory = Mage::registry('current_category') ?>
+<?php $_category = Mage::getModel('catalog/category')->load($currentCategory->getId()) ?>
+<?php $_subcategories = $_category->getChildrenCategories() ?>
+<?php //$currentProduct = Mage::registry('current_product')->getId() ?>
+<?php 
+$clM = Mage::getModel('lesson/jpcustomerlesson');
+$customerId = Mage::getSingleton('customer/session')->getId();
+$clM->setCustomerId($customerId);
+$clM_collection = $clM->getCustomerProduct();
+?>
+
+<?php if (count($_subcategories) > 0): ?>
+<?php foreach($_subcategories as $_subcategory): ?>	
+              <?php $tabId = 1;?>
+	<div class="tabs">
+		<ul class="session_tabs">
+			<li style="z-index:9;"><a href="#" title="" rel="tab-1" id="tabs_dia" class="active"><span><?php echo $_subcategory->getName()?></span></a></li>
+		</ul>
+	</div><!--End tabs-->
+		
+	<div class="tab-panel">
+	
+		<div class="tab-content <?php if($tabId==1){echo 'active'; }?>" id="tab-<?php echo $tabId;?>">
+			<ul id="course_list">
+			    <?php  $products = Mage::getModel('catalog/product')->getCollection() 
+                                              ->addCategoryFilter($_subcategory)
+                                              ->addAttributeToSelect(array('id', 'name'));
+                       
+                                              
+                                              
+                                              ?>
+                        <?php   $i = 0; ?>            
+                        <?php   foreach ($products as $product): ?> 
+                        <?php        $i++;
+                                     // $_product means to get product model so that we can get image otherwise $product cant output image
+                                     $pid = $product->getId();
+                                     $_product = Mage::getModel('catalog/product')->load($pid);
+                                     $pstatu = Mage::getResourceModel('catalog/product')->getAttributeRawValue($pid, 'status');
+                                     // Get customer product status
+                                     foreach ($clM_collection as $clM_collect) {
+                                     	if($clM_collect->getProduct_id() == $pid) {
+                                     	   $productStatus = $clM_collect->getStatus();
+                                     	}
+                                     }
+                                     
+                                     ?>
+                                    <li>
+                                        <a href="<?php echo $product->getProductUrl()?>">
+                                            <img src="<?php echo $this->helper('catalog/image')->init($_product, 'image')?>">
+                                            <div class="course_finish" class="course_mark"><?php if($productStatus) { echo '学習完了'; } unset($productStatus)?></div>
+                                            <div class="course_titile"><?php echo $i ;?>.<?php echo $product->getName() ;?></div>
+                                        </a>
+                                    </li>
+                        <?php   endforeach; unset($i); ?> 
+			</ul>
+	    </div>
+	    
+	</div><!--End tab-panel-->
+			        <?php break;?>
+			  <?php $tabId++;?>      
+		<?php endforeach; ?>
+	<?php endif; ?>
+</div><!--End main-->

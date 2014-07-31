@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<config>
+  <modules>
+    <Learnlan_CMSTemplates>
+      <version>0.1.0</version>
+    </Learnlan_CMSTemplates>
+  </modules>
+  <global>
+    <page>
+      <layouts>
+        <learnlan_two_columns translate="label">
+          <label>Learnlan Two-Column Layout</label>
+          <template>page/learnlan-2columns.phtml</template>
+          <layout_handle>learnlan_two_columns</layout_handle>
+        </learnlan_two_columns>
+        <learnlan_one_columns translate="label">
+          <label>Learnlan One-Column Layout</label>
+          <template>page/learnlan-1column.phtml</template>
+          <layout_handle>learnlan_one_columns</layout_handle>
+        </learnlan_one_columns>
+      </layouts>
+    </page>
+  </global>
+</config>

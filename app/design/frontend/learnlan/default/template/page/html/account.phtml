@@ -1,0 +1,35 @@
+	<h3 class="subtitle">アカウント設定</h3>	
+	
+	<div class="tabs">
+		<ul class="account_tabs">
+			<li style="z-index:9;"><a href="#" title="" rel="tab-1" id="tabs_dia" class="active"><span>プロフィール</span></a></li>
+			<li style="z-index:8;"><a href="#" title="" rel="tab-2" id="tabs_voc"><span>メール通知</span></a></li>
+		</ul>
+	</div><!--End tabs-->
+		
+	<div class="tab-panel">
+		<div class="tab-content active" id="tab-1">
+			<form id="form1" name="form1" method="post" action="" class="account_form">
+				<ul>
+					<li class="account_form_title">アカウント名　</li><li class="account_form_entry"><input type="text"　name="entry_name" id="entry_name" value="" class="entry_text" /></li>
+					<li class="account_form_title">メールアドレス</li><li class="account_form_entry"><input type="text"　name="entry_name" id="entry_mail" value="" class="entry_text" /></li>
+				</ul>
+				<div class="entry_check"><input type="checkbox" name="entry_changepassword" id="entory_changepassword" value="1" />メールパスワードを変更</div>
+				<ul id="entory_changepassword_area">
+					<li class="account_form_title">現在のパスワード</li><li class="account_form_entry"><input type="password"　name="entry_password"    id="entry_password"    value="" class="entry_text" /></li>
+					<li class="account_form_title">新しいパスワード </li><li class="account_form_entry"><input type="password"　name="entry_newpassword" id="entry_newpassword" value="" class="entry_text" /></li>
+					<li class="account_form_title">（確認）                 </li><li class="account_form_entry"><input type="password"　name="entry_confirm"     id="entry_confirm"     value="" class="entry_text" /></li>
+				</ul>
+				<div class="entry_submit"><input type="submit" name="content_submit" value="保存する" id="account_submit" /></div>
+			</form>			
+		</div>
+		
+		<div class="tab-content" id="tab-2">
+			<form id="form2" name="form2" method="post" action="" class="account_form2">
+				<div class="entry_check"><input type="checkbox" name="entry_changepassword" id="entry_notification" value="1" checkd="checked" />お知らせを受け取る</div>
+				<div class="entry_submit"><input type="submit" name="content_submit" value="保存する" id="account_submit" /></div>
+			</form>			
+		</div><!--End tab-2-->
+      
+
+	</div><!--End tab-panel-->
