@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+    <config>
+        <modules>
+            <Chinese_Checkout>
+                <version>0.1.0</version>
+            </Chinese_Checkout>
+        </modules>
+ 
+        <global>
+           <models>
+              <checkout>
+                  <rewrite>
+                      <checkout>Chinese_Checkout_Model_Checkout</checkout>
+                 </rewrite>
+              </checkout>
+           </models>
+        </global>
+             
+    <frontend>
+        <routers>
+            <checkout>
+                <args>
+                    <modules>
+                        <chinese_checkout before="Mage_Checkout">Chinese_Checkout</chinese_checkout>
+                    </modules>
+                </args>
+            </checkout>
+        </routers>
+    </frontend>
+
+  </config>

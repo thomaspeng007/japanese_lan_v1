@@ -1,19 +1,14 @@
-<?php $_helper = Mage::helper('catalog/category') ?>
-<?php $_categories = $_helper->getStoreCategories() ?>
-<?php $currentCategory = Mage::registry('current_category') ?>
-<?php $_category = Mage::getModel('catalog/category')->load($currentCategory->getId()) ?>
-<?php $_subcategories = $_category->getChildrenCategories() ?>
-<?php $currentProduct = Mage::registry('current_product')->getId() ?>
+<?php $currentProductId = Mage::registry('current_product')->getId() ?>
 <?php      
-      if (count($_subcategories) > 0) {
-         foreach($_subcategories as $_subcategory) {
+      $deepestLevelCate = Mage::registry('deepestlevel_cate');
+     
 			    $products = Mage::getModel('catalog/product')->getCollection() 
-                                              ->addCategoryFilter($_subcategory)
+                                              ->addCategoryFilter($deepestLevelCate)
                                               ->addAttributeToSelect(array('id', 'name'));
                        $productTotal = count($products);
                        $i = 0;             
                        foreach ($products as $product) {
-                              if ($currentProduct==$product->getId()){ 
+                              if ($currentProductId==$product->getId()){ 
                               	  // First find out the pointer
                                   $previous_i = $i - 1;
                                   $next_i = $i + 1;
@@ -31,17 +26,12 @@
                              if($j== $productTotal - 1) { $lastProduct = $product; }    	     
                        	     $j++;
                        }
-                       unset($j);
-		         break;
-         }
-     }
+                       unset($j);	
 ?>
-	
-
 <span class="main02_2">
-<?php if($currentProduct!=$firstProduct->getId()): ?>
+<?php if($currentProductId!=$firstProduct->getId()): ?>
 <a href="<?php echo $previousProduct->getProductUrl()?>" >
-<div id="lesson_prev"><p>＜ 前の課へ</p></div><div id="lesson_prev_s"><p>＜</p></div></a><?php endif;?><?php if($currentProduct!=$lastProduct->getId()): ?>
+<div id="lesson_prev"><p>＜ 前の課へ</p></div><div id="lesson_prev_s"><p>＜</p></div></a><?php endif;?><?php if($currentProductId!=$lastProduct->getId()): ?>
 <a href="<?php echo $nextProduct->getProductUrl()?>" ><div id="lesson_next"><p>次の課へ ＞</p></div><div id="lesson_next_s"><p>＞</p></div></a>
 <?php endif;?>
 </span>

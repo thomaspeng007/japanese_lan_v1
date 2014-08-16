@@ -27,7 +27,9 @@
 /**
  * Shopping cart controller
  */
-class Mage_Checkout_CartController extends Mage_Core_Controller_Front_Action
+require_once(Mage::getModuleDir('controllers','Mage_Checkout').DS.'CartController.php');
+
+class Chinese_Checkout_CartController extends Mage_Core_Controller_Front_Action
 {
     /**
      * Action list where need check enabled cookie
@@ -177,6 +179,9 @@ class Mage_Checkout_CartController extends Mage_Core_Controller_Front_Action
             $this->_goBack();
             return;
         }
+        
+    
+            
         $cart   = $this->_getCart();
         $params = $this->getRequest()->getParams();
         try {
@@ -189,7 +194,8 @@ class Mage_Checkout_CartController extends Mage_Core_Controller_Front_Action
 
             $product = $this->_initProduct();
             $related = $this->getRequest()->getParam('related_product');
-
+            
+            
             /**
              * Check product availability
              */
@@ -197,7 +203,7 @@ class Mage_Checkout_CartController extends Mage_Core_Controller_Front_Action
                 $this->_goBack();
                 return;
             }
-
+            
             $cart->addProduct($product, $params);
             if (!empty($related)) {
                 $cart->addProductsByIds(explode(',', $related));
@@ -206,14 +212,56 @@ class Mage_Checkout_CartController extends Mage_Core_Controller_Front_Action
             $cart->save();
 
             $this->_getSession()->setCartWasUpdated(true);
-
-
+            
+            /**
+             * Thomas: remove any exisiting pricing plan before adding a new one, the updated one should be
+             * the one of the pricing plan. The pricing category id is 11.
+             */
+            if(max($product->getCategoryIds())==11) {
+                // frist of all, get all the items from current cart
+            	$items = Mage::getSingleton('checkout/session')->getQuote()->getAllItems();
+            	
+            	$cartHelper = Mage::helper('checkout/cart');
+            	$items = $cartHelper->getCart()->getItems();
+            	foreach ($items as $item) {
+            		// filter the $items by category 11 which is pricing so that it limits down to cart 11
+            		$_product = Mage::getModel('catalog/product')->load($item->getProductId());
+            		if(max($_product->getCategoryIds())==11) {
+            		   // remove previous type of plan if any
+            		   if($item->getProductId()!=$product->getId()) {
+            		      $cartHelper->getCart()->removeItem($item->getItemId())->save();
+            		   } else { // if add the same plan more than once, reset it to one and keep it only one plan type in cart at all times
+            			    if($item->getQty()>1) {
+            			       $item->setQty(1);
+            			       $cartHelper->getCart()->save();
+            			     }
+            		   }
+            		}		
+            	} // End of foreach            
+            }
+            
+            
+            
             /**
              * @todo remove wishlist observer processAddToCart
              */
             Mage::dispatchEvent('checkout_cart_add_product_complete',
                 array('product' => $product, 'request' => $this->getRequest(), 'response' => $this->getResponse())
             );
+          
+            
+            /**
+             * Thomas: redirect to onepage skipping cart page
+             * @description: in the pricing page, there are three virtual products representing three basic
+             * payment. The pricing category id is 11, note making sure the live site has the same id. The category
+             * id checking will make sure only payment product can skip the cart page so that normal products
+             * will follow the magento normal procesure.
+             */
+            if(max($product->getCategoryIds())==11) {
+               $response = $this->getResponse();
+		       //$response->setRedirect(Mage::getUrl('checkout/onepage'));
+		       //Mage::getSingleton('checkout/session')->setNoCartRedirect(true);
+            }
 
             if (!$this->_getSession()->getNoCartRedirect(true)) {
                 if (!$cart->getQuote()->getHasError()) {

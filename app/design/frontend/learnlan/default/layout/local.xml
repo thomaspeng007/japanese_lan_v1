@@ -258,6 +258,65 @@ reason, need for find a solution, right now make it only login user available
         </reference>
         
     </contacts_index_index>
+
+<!--
+One page checkout main layout
+-->
+
+    <checkout_onepage_index translate="label">
+       <reference name="head">
+                    <action method="removeItem"><stylesheet>css/index.css</stylesheet></action>    
+                    <action method="removeItem"><type>skin_css</type><name>css/exe.css</name></action>
+                    <action method="removeItem"><type>skin_js</type><name>js/jquery-1.11.1.min.js</name></action>
+                    <action method="removeItem"><type>skin_js</type><name>js/generalController.js</name></action>
+                    <action method="removeItem"><type>skin_js</type><name>js/audioController.js</name></action>
+                    <action method="removeItem"><type>skin_js</type><name>js/live/prod.min.js</name></action>
+                    <action method="removeItem"><type>skin_js</type><name>js/footerFixed.js</name></action>       
+                    <action method="removeItem"><type>skin_js</type><name>js/jquery.heightLine.js</name></action> 
+                    <action method="addJs"><script>prototype/prototype.js</script></action>
+                <action method="addJs"><script>lib/ccard.js</script></action>
+                <action method="addJs"><script>prototype/validation.js</script></action>
+                <action method="addJs"><script>scriptaculous/builder.js</script></action>
+                <action method="addJs"><script>scriptaculous/effects.js</script></action>
+                <action method="addJs"><script>scriptaculous/dragdrop.js</script></action>
+                <action method="addJs"><script>scriptaculous/controls.js</script></action>
+                <action method="addJs"><script>scriptaculous/slider.js</script></action>
+                <action method="addJs"><script>varien/js.js</script></action>
+                <action method="addJs"><script>varien/form.js</script></action>
+                <action method="addJs"><script>varien/menu.js</script></action>
+                <action method="addJs"><script>mage/translate.js</script></action>
+                <action method="addJs"><script>mage/cookies.js</script></action>
+
+                <block type="page/js_cookie" name="js_cookies" template="page/js/cookie.phtml"/>
+
+                <action method="addCss"><stylesheet>css/styles.css</stylesheet></action>
+                <action method="addItem"><type>skin_css</type><name>css/styles-ie.css</name><params/><if>lt IE 8</if></action>
+                <action method="addCss"><stylesheet>css/widgets.css</stylesheet></action>
+                <action method="addCss"><stylesheet>css/print.css</stylesheet><params>media="print"</params></action>
+
+                <action method="addItem"><type>js</type><name>lib/ds-sleight.js</name><params/><if>lt IE 7</if></action>
+                <action method="addItem"><type>skin_js</type><name>js/ie6.js</name><params/><if>lt IE 7</if></action>
+          
+       </reference>
+       <reference name="root">
+          <!-- Thomas: as 'right' block has been removed from default handle we have to use 'as' to rename
+               the 'right' to 'right.checkout.progress' so that 'checkout progress' block can be visable  -->
+          <block name="right.checkout.progress" as="right" type="core/text_list">
+             <action method="unsetChildren"></action>
+             <block type="page/html_wrapper" name="checkout.progress.wrapper" translate="label">
+                <label>Checkout Progress Wrapper</label>
+                <action method="setElementId"><value>checkout-progress-wrapper</value></action>
+                <block type="checkout/onepage_progress" name="checkout.progress" before="-" template="checkout/onepage/progress.phtml">
+                    <block type="checkout/onepage_progress" name="billing.progress" template="checkout/onepage/progress/billing.phtml"></block>
+                    <block type="checkout/onepage_progress" name="shipping.progress" template="checkout/onepage/progress/shipping.phtml"></block>
+                    <block type="checkout/onepage_progress" name="shippingmethod.progress" template="checkout/onepage/progress/shipping_method.phtml"></block>
+                    <block type="checkout/onepage_progress" name="payment.progress" template="checkout/onepage/progress/payment.phtml"></block>
+                </block>
+              </block>
+            </block>
+       </reference>
+       
+    </checkout_onepage_index>
   
 
 </layout>

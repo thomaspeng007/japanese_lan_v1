@@ -22,7 +22,7 @@
 <?php $_category = Mage::getModel('catalog/category')->load($currentCategory->getId()) ?>
 <?php $_subcategories = $_category->getChildrenCategories() ?>
 <?php //$currentProduct = Mage::registry('current_product')->getId() ?>
-<?php 
+<?php                                      
 $clM = Mage::getModel('lesson/jpcustomerlesson');
 $customerId = Mage::getSingleton('customer/session')->getId();
 $clM->setCustomerId($customerId);
@@ -62,6 +62,11 @@ $clM_collection = $clM->getCustomerProduct();
                                      	   $productStatus = $clM_collect->getStatus();
                                      	}
                                      }
+                                     
+                                     // fix registry of current_category
+                                     
+                                   
+                                     
                                      
                                      ?>
                                     <li>

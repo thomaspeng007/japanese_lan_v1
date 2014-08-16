@@ -55,7 +55,6 @@ Default layout, loads most of the pages
                 <!-- Mark root page block that template is applied -->
                 <action method="setIsHandle"><applied>1</applied></action>
                 <reference name="head">
-                    <action method="addItem"><type>skin_js</type><name>js/jquery-1.11.1.min.js</name></action> 
                     <action method="addCss"><stylesheet>css/index.css</stylesheet></action>
                     <action method="addCss"><type>skin_js</type><name>js/jquery.heightLine.js</name></action>
                     <action method="addCss"><type>skin_js</type><name>js/footerFixed.js</name></action>

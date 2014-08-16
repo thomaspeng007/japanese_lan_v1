@@ -40,7 +40,7 @@ $favorites = $clM->getCustomerFavorite();
 			<div class="restart"><img src="<?php echo $this->helper('catalog/image')->init($_product, 'image')?>" />
 				<ul>				   
 					<!-- <li>入門　＞</li><li>セッション1</li> -->
-					<li class="restart_title"><a href="<?php echo $_product->getProductUrl() ?>">「<?php echo $_product->getName() ;?>」</a><div class="restart_btn"><a href="<?php echo $_product->getProductUrl() ?>">学習開始<img src="<?php echo $this->getSkinUrl('images/list_style.png');?>" /></a></div></li>
+					<li class="restart_title"><a href="<?php echo $_item->getProductUrl() ?>">「<?php  echo $_product->getName();?>」</a><div class="restart_btn"><a href="<?php echo $_product->getProductUrl() ?>">学習開始<img src="<?php echo $this->getSkinUrl('images/list_style.png');?>" /></a></div></li>
 
 				</ul>
 			</div>
