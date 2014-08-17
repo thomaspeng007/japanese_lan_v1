@@ -259,8 +259,8 @@ class Chinese_Checkout_CartController extends Mage_Core_Controller_Front_Action
              */
             if(max($product->getCategoryIds())==11) {
                $response = $this->getResponse();
-		       //$response->setRedirect(Mage::getUrl('checkout/onepage'));
-		       //Mage::getSingleton('checkout/session')->setNoCartRedirect(true);
+		       $response->setRedirect(Mage::getUrl('checkout/onepage'));
+		       Mage::getSingleton('checkout/session')->setNoCartRedirect(true);
             }
 
             if (!$this->_getSession()->getNoCartRedirect(true)) {
