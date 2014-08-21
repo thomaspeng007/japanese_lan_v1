@@ -31,6 +31,23 @@ $customerId = Mage::getSingleton('customer/session')->getId();
 $clM = Mage::getModel('lesson/jpcustomerlesson');
 $clM->setCustomerId($customerId);
 $favorites = $clM->getCustomerFavorite();
+
+// get full product url with category ID and product ID
+function getFullProductCategoryUrl($currentProduct) {
+   if($currentProduct){
+   	   $pid = $currentProduct->getId();
+       $cats = $currentProduct->getCategoryIds();
+       // get the most closest cate ID of the current product
+       $deepestLevelCateId = max($cats);
+       // get product base category which means, beginner or primary or same level category
+       $baseCate = Mage::getModel('catalog/category')
+                 ->load($deepestLevelCateId)
+                 ->getParentCategory();
+       return Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB)."index.php/catalog/product/view/id/".$pid."/category/".$baseCate->getId()."/";
+   
+   }
+}
+
 ?>
 <?php if ($_products = $this->getRecentlyViewedProducts()): ?>
 <div class="tab-panel">
@@ -40,7 +57,7 @@ $favorites = $clM->getCustomerFavorite();
 			<div class="restart"><img src="<?php echo $this->helper('catalog/image')->init($_product, 'image')?>" />
 				<ul>				   
 					<!-- <li>入門　＞</li><li>セッション1</li> -->
-					<li class="restart_title"><a href="<?php echo $_item->getProductUrl() ?>">「<?php  echo $_product->getName();?>」</a><div class="restart_btn"><a href="<?php echo $_product->getProductUrl() ?>">学習開始<img src="<?php echo $this->getSkinUrl('images/list_style.png');?>" /></a></div></li>
+					<li class="restart_title"><a href="<?php echo getFullProductCategoryUrl($_product); ?>">「<?php  echo $_product->getName();?>」</a><div class="restart_btn"><a href="<?php echo getFullProductCategoryUrl($_product); ?>">学習開始<img src="<?php echo $this->getSkinUrl('images/list_style.png');?>" /></a></div></li>
 
 				</ul>
 			</div>
