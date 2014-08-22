@@ -70,7 +70,7 @@ $('document').ready(function(){
        tracks = playlist.find('li a	');
        len = tracks.length;
        player = audio1[0];  
-       player.volume = .50;
+       player.volume = .99;
 
        // control playlist play/pause
        playlist.find('#dia_play').click(function (e) {   
@@ -190,7 +190,7 @@ $('document').ready(function(){
     	   e.preventDefault();   
     	   link2 = $(this);    
     	  
-    	   player2.volume = .50; 
+    	   player2.volume = .99; 
     	   player2.src = link2.attr('href');
           
     	   player2.load();
