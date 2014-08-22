@@ -1,4 +1,5 @@
 <?php 
+// 3 is the id of learnlan, all categories are under learnlan
  $_category = Mage::getModel('catalog/category')->load(3);    
     $_categories = $_category
                     ->getCollection()
@@ -6,8 +7,8 @@
                     ->addAttributeToSelect(array('name', 'description', 'url_key'))
                     ->addIdFilter($_category->getChildren());
 
- // get current category ID
- $currentCatId = Mage::getModel('catalog/layer')->getCurrentCategory()->getId();
+ // get current category ID, if current_category is not available return root category id, which is also OK
+$currentCatId = Mage::getModel('catalog/layer')->getCurrentCategory()->getId();
 ?>
 <div id="sidebar01">
 	<ul id="menu">
@@ -21,7 +22,9 @@
 		?>
 		<?php foreach ($_categories as $_category): ?>
 		<li <?php if($currentCatId == $_category->getId()){ echo 'class="menu_active"'; } ?>>
-		    <?php if($_category->getId()==4):?>
+		    <!-- enable category beginner(4) and primary(5) -->
+		    <?php $allowedPublishCateId = array('4','5') ?>
+		    <?php if(in_array($_category->getId(), $allowedPublishCateId)):?>
 		    <a href="<?php echo $this->getCategoryUrl($_category); ?>"><img src="<?php echo $this->getSkinUrl('images/list_style.png');?>" /><?php echo $_category->getName();?>
 		    <span class="menu_detail"><?php echo $_category->getDescription(); ?></span></a>	
 		    <?php else:?>
