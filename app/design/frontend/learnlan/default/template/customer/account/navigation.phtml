@@ -33,6 +33,10 @@
             <?php $_links = $this->getLinks(); ?>
             <?php $_index = 1; ?>
             <?php $_count = count($_links); ?>
+            <!-- Thomas: the normal way to disable links need to modify multiple files, for the simplicity 
+                         I will rule out any link after 4, so that we only allow the top four active links appears,
+                         for the 'address_book', which is in order 3 I have remove it from customer.xml. I set $i =0 then break if $i=/>4 -->
+            <?php $i = 0; ?>
             <?php foreach ($_links as $_link): ?>
                 <?php $_last = ($_index++ >= $_count); ?>
                 <?php if ($this->isActive($_link)): ?>
@@ -40,6 +44,7 @@
                 <?php else: ?>
                     <li<?php echo ($_last ? ' class="last"' : '') ?>><a href="<?php echo $_link->getUrl() ?>"><?php echo $_link->getLabel() ?></a></li>
                 <?php endif; ?>
+                <?php $i++; if($i==3) { break; }?>
             <?php endforeach; ?>
         </ul>
     </div>
