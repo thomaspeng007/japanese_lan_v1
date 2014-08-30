@@ -864,16 +864,13 @@ span.display_large {font-size:36px;padding-left:10px;}
 	width:23.8%;height:40px;
 	line-height:40px;
 	margin-right:0.5%;
-}
-.mobile_menu ul li.mobile_menu_active{
-	background-color:#9F9F9F;
-}
-.mobile_menu ul li a{
-	display:block;
-	padding-left:10px;
-	text-decoration:none;
 	font-size:16px;color:#000066;font-weight:bold;
 }
+.mobile_menu ul li.mobile_menu_active{background-color:#9F9F9F;}
+.mobile_menu ul li a{display:block;	text-decoration:none;color:#000066;}
+.mobile_menu ul li span.comingsoon {position:absolute;}
+.mobile_menu ul li span.comingsoon img {position:relative;left:10px;opacity:0.9;width:49;height:29px;}
+.mobile_menu ul li img {padding-left:3px;}
 
 #course_list {display: inline-block;text-align:center;padding:5px;}
 #course_list li{
@@ -890,6 +887,18 @@ span.display_large {font-size:36px;padding-left:10px;}
 	width:120px;height:90px;
 	border-radius:5px 5px 0 0;
 }
+#course_list div.free_mark{
+	z-index: 10;
+	position: absolute;
+}
+#course_list div.free_mark img{
+	width: 50px;
+	height: 49px;
+	position:relative;
+	left:80px;
+	top:-5px;
+}
+
 #course_list li a{display:block;text-decoration:none;}
 #course_list li a:hover img{opacity:0.5;}
 
@@ -926,6 +935,7 @@ h3.subtitle {
 	margin-bottom:15px;
 	padding-left:32px;
 	font-family:Meiryo;
+	text-align:left;
 }
 .subtitle_contents {
 	background-color:#FFF;
@@ -1028,14 +1038,227 @@ div.entry_submit { width:470px;text-align:center;margin-top:5px;}
 div.entry_submit button{ padding:5px 10px;border:solid 1px #000;border-radius:4px;background-color:#0067D0;font-weight:bold;color:#FFF;}
 div.entry_submit button:hover {background-color:#91C8FF;cursor:pointer;}
 .account_form ul#entory_changepassword_area {display:none;border:solid 1px #FFB0FF;background-color:#FFF0FF;padding:10px;}
-
 .account_form2 {margin:20px;}
 .account_form2 div {margin-bottom:15px;font-size:13px;}
+/*** Account Sidebar ***/
+div.block-title , div.block-content li {
+	border-right:solid 1px #C1C1C1;border-left:solid 1px #C1C1C1;
+	height:50px; line-height:50px; 
+	text-align:center;font-size:16px;font-weight: bold;color: #000066; 
+}
+div.block-title {
+	border-top:solid 1px #C1C1C1;border-bottom:solid 3px #000;
+	border-radius:7px 7px 0 0;
+	background-color:#F8F8F8;
+}
+div.block-content li {border-bottom:solid 1px #C1C1C1;background-color:#FFF;}
+div.block-content li.current {background-color: #9F9F9F;}
+div.block-content li:hover {background-color: #9F9F9F;}
+div.block-content li a {text-decoration:none;color: #000066;}
+/*** My Order ***/
+#my-orders-table {width:100%; border: 1px solid #BEBCB7 !important;;border-collapse:collapse;font-size:13px;}
+#my-orders-table thead {background-color:#D9E5EE;}
+#my-orders-table thead th {
+	font-weight: bold;
+	border-right: 1px solid #C2D3E0;
+	padding: 3px 8px;
+	color: #0A263C;
+	white-space: nowrap;
+	vertical-align: middle;
+	 background:url(../images/bkg_th.gif) repeat-x 0 100% #d9e5ee; 
+}
+#my-orders-table tbody {background-color:#FFF;}
+#my-orders-table tbody td {border-right: 1px solid #D9DDE3;	border-top: 1px solid #D9DDE3;padding: 3px 8px;}
+
+#my-orders-table .even {background: none repeat scroll 0% 0% #EEEDED;}
+
+div.order-details .data-table {border-collapse:separate !important;}
+div.order-details .data-table .odd {background: none repeat scroll 0% 0% #F8F7F5;}
+div.order-details .data-table tbody td {font-size:12px !important;}
+div.order-details .data-table tfoot {border-bottom: 1px solid #BEBCB7;}
+div.order-details .data-table tfoot tr {background-color: #DEE5E8 !important;}
+div.order-details .data-table tfoot td {padding-top: 1px;padding-bottom: 1px;border-bottom: 0px none;border-right: 1px solid #D9DDE3;}
+div.order-details .data-table tbody.odd tr {background: none repeat scroll 0% 0% #F8F7F5 !important;}
+
+
+.nobr {white-space: nowrap !important;}
+.pager {
+    font-size: 11px;
+    background: url('../images/bkg_toolbar.gif') repeat-x scroll 0px 100% #FFF;
+    padding: 4px 8px;
+    border-top: 1px solid #E2E2E2;
+    text-align: center;
+    content: ".";
+ }
+.pager:after {clear:both;content: ".";}
+.pager .amount  {float: left;margin: 0px;}
+.pager .limiter {float: right;margin: 0px;}
+div.my-account .page-title {font-size: 20px;border-bottom: 1px solid #666;margin-bottom:10px;}
+.order-date {margin: 10px 0px;font-size:12px;padding-left:20px;}
+.order-info {
+    background: none repeat scroll 0% 0% #DEE5E8;
+    border: 1px solid #D0CBC1;
+    padding: 4px 8px;
+    margin: 0px 0px 8px;
+    font-size:13px;font-weight:bold;
+}
+.order-info-box {
+    background: url('../images/bkg_block-title.gif') repeat-x scroll 0px 0px #FFF;
+    border: 1px solid #D0CBC1;
+    padding: 12px 15px;
+    margin: 0px 0px 15px;
+}
+.order-info-box h2 {font-weight: bold;font-size: 13px;}
+.col2-set .col-1 {float: left ;width: 48.5%;}
+.col2-set .col-2 {float: right;width: 48.5%;}
+.col2-set:after {clear:both;content: ".";display: block;}
+
+
 
 /*** Payment ***/
 #payment .notice {width:700px;border:solid 4px #0067D0;border-radius:4px;background-color:#FFF;margin-top:50px;text-align:center;}
 #payment .notice p {font-size:30px;line-height:60px;}
 #payment .notice p span {font-size:40px;color:#0067D0;font-weight:bold}
+
+/*** Pricing page1 ***/
+.contents_frame{background-color:#FFF;margin:5px 0 20px 0;padding-top:20px;border:solid 1px #606060;border-radius:5px;}
+#price_title {
+	font-size:30px;
+	font-weight:bold;
+	text-align:center;
+	margin-bottom:25px;
+}
+div.recommend{
+	position:absolute;
+}
+div.recommend img{
+	width: 80px;
+	height: 83px;
+	position:relative;
+	top:-260px;
+	left:120px;
+	
+}
+ul.products-grid li {
+	display:inline-block;
+	width:200px;height:220px;
+	border:solid 1px #C1C1C1;border-radius:10px;
+	background-color:#F4FAFF;
+	margin:25px 25px 25px 25px;
+}
+div.actions {text-align:center;}
+div.actions div.btn-cart {
+	display:inline-block;
+	text-align:center;
+	width:164px;height:41px;
+	background-image:url(../images/btn_AddPremium.png);
+	background-repeat:repeat;background-position:center;
+	margin-bottom:18px;
+}
+div.actions div.btn-cart:hover{
+	background-image:url(../images/btn_AddPremium_o.png);
+	cursor:pointer;
+}
+div.regular-price .total_price {
+	font-size:15px;
+	font-weight:bold;
+	text-align:center;
+}
+div.regular-price div.course_name {
+	margin-top:15px;
+	font-size:38px;
+	font-weight:bold;
+	font-family:meiryo;
+	color:#066BCC;
+	text-align:center;
+}
+div.regular-price div.course_name .course_name_char {
+	font-size:15px;
+	font-weight:bold;
+	font-family:meiryo;	
+	color:#333333;
+	
+}
+div.regular-price div.montly_detail {
+	font-size:20px;
+	font-weight:bold;
+	text-align:center;
+}
+div.regular-price div.montly_detail .montly_price {
+	font-size:35px;
+}
+.category-products {text-align:center;}
+#payment_explain {display:inline-block;padding-left:10px;}
+#payment_explain img {float:left;}
+#payment_explain span {float:left;color:#333333;font-size:14px;font-weight:bold;padding-left:10px;}
+#member_list {font-size:15px;margin-top:50px;border:solid 3px #666666;display: inline-block;}
+#member_list tr {height:80px;}
+#member_list td {width:200px;background-color:#FFF;text-align:center;vertical-align:middle;font-family:meiryo;}
+#member_list td span {font-family:meiryo;}
+#member_list td.list_line1 {border-bottom:solid 2px #666666;}
+#member_list td.list_line2 {border-right :solid 1px #666666;}
+#member_list td.list_line3 {border-bottom:solid 1px #CCCCCC;}
+#member_list td span.list_font1 {font-size:20px;font-weight:bold;}
+#member_list td span.list_font2 {color:#015FBA;font-weight:bold;}
+#member_list td span.list_font3 {font-weight:bold;}
+#payment_notes {margin-top:50px;margin-bottom:50px;display:inline-block;}
+#payment_notes div {font-size:22px;font-weight:bold;}
+#payment_notes ul {list-style-type:disc;margin-left:20px;}
+#payment_notes li {font-size:16px;}
+/*** Pricing page2 ***/
+body div.main-container {text-align:center;}
+#main_checkout {width:960px;display:inline-block;padding-top:20px;padding-bottom:40px;
+background-color:#FFF;margin:20px 0 20px 0;border:solid 1px #AAA;
+}
+#pricing_main {float:left;width:700px;margin:0 10px;}
+#pricing_main h1 {font-size:30px;font-weight:bold;padding:0px 0 10px 20px;}
+#pricing_side {float:left;width:220px;margin:0 10px;}
+#pricing_side .block-title {
+	width:220px;height:41px;margin-top:30px;
+	background-image:url(../images/title_progress.png);
+	background-repeat:repeat;background-position:center;
+}
+#billing-progress-opcheckout dt , #payment-progress-opcheckout dt {
+	border-right:solid 1px #999999;border-left:solid 1px #999999;border-bottom:solid 1px #999999;
+	background-color:#E0E0E0;
+	height:30px;padding-left:10px;
+	line-height:30px;font-weight:bold;font-size:13px;
+}
+#billing-progress-opcheckout dd , #payment-progress-opcheckout dd {
+	border-right:solid 1px #999999;border-left:solid 1px #999999;border-bottom:solid 1px #999999;
+	background-color:#FFF;
+	padding:5px 0 5px 10px;font-size:12px;
+}
+#billing-progress-opcheckout dt a , #payment-progress-opcheckout dt a {
+	color:#039;
+}
+#checkoutSteps li {background-color:#FFF;}
+#checkoutSteps li        div.step-title {background-color:#EEEEEE;border-top:solid 1px #CCCCCC;border-left:solid 1px #CCCCCC;border-right:solid 1px #CCCCCC;height:30px;line-height:26px;}
+#checkoutSteps li.active div.step-title {background-color:#0059B3;}
+#checkoutSteps li        div.step-title .number {background-color:#FFF;padding:0 3px;margin:0 12px 0 5px;position:relative;top:-2px;}
+#checkoutSteps li        div.step-title .label  {color:#666666;font-size:15px;font-weight:bold;line-height:29px;}
+#checkoutSteps li.active div.step-title .label  {color:#FFF;}
+li#billing-new-address-form label {font-size:12px;font-weight: bold;color:#555;}
+li#billing-new-address-form label em {color:red;}
+li#billing-new-address-form .fields {margin-top:10px;}
+#checkout-step-billing, #checkout-step-payment , #checkout-review-load {border-right:solid 1px #CCCCCC;border-left:solid 1px #CCCCCC;padding-bottom:10px;padding-left:30px;}
+#opc-review {border-bottom:solid 1px #CCCCCC;}
+#billing-buttons-container p {font-size:12px;margin-top:7px;margin-left:40px;color:red;text-align:left;}
+#payment_form_paypal_standard {display:none;}
+#checkout-step-payment .required ,#checkout-step-payment .back-link {display:none;}
+#co-payment-form {padding:10px 0;}
+
+#checkout-step-billing button ,#checkout-step-payment button ,#checkout-review-load  button {font-weight:bold;}
+.buttons-set {text-align:center;}
+#checkout-review-table-wrapper {display:none;}
+#checkout-review-submit p {display:none;}
+#payment_check_product {font-size:13px;font-weight:bold;padding:10px 0;}
+#payment_check_product span {padding-left:20px;}
+
+#checkout-step-billing li.wide {padding-top:10px;}
+#checkout-step-billing li.wide label {font-size:13px;font-weight: bold;color:#333;}
+#checkout-step-billing li.control {display:none;}
+.please-wait img {display:none;}
 
 /*** screens smaller than 768
 ***************************************************************************/
@@ -1181,7 +1404,15 @@ div.entry_submit button:hover {background-color:#91C8FF;cursor:pointer;}
 	.favorite > li ul li.favorite_title {font-size:12px;text-decoration:underline;}
 	/*** Payment ***/
 	#payment .notice {width:98%;}
-
+	/*** Pricing page1 ***/
+	#payment_explain span {width:74%;}
+	#payment_explain img {width:100px;}
+	/*** Pricing page2 ***/
+	#main_checkout {width:98%;margin-bottom:10px;margin:0 2px;}
+	#pricing_main {width:98%;margin:5px}
+	#pricing_side {display:none;}
+	#pricing_main h1 {font-size: 20px;}
+	#checkout-step-billing, #checkout-step-payment , #checkout-review-load {padding-left:20px;}
 }
 
 
@@ -1376,6 +1607,7 @@ div.entry_submit button:hover {background-color:#91C8FF;cursor:pointer;}
 	
 	/*** Category ***/
 	.mobile_menu{display:block;}
+	.mobile_menu ul li span.comingsoon img {position:relative;left:-25px;opacity:0.9;width:49;height:29px;}
 	h3.subtitle {width:95%;}	
 	.tabs > UL.session_tabs {float:left; width:450px; margin:0; padding:0;overflow:hidden;}
 	.tabs > UL.session_tabs > LI {float:left; padding:0px; margin-right:2px; background:none; position:relative;font-size:12px;overflow:hidden;width:80px;text-align:center;}
@@ -1420,4 +1652,29 @@ div.entry_submit button:hover {background-color:#91C8FF;cursor:pointer;}
 	#payment .notice {width:98%;}
 	#payment .notice p {font-size:20px;}
 	#payment .notice p span {font-size:26px;}
+	/*** Pricing page1 ***/
+	#payment_explain span {width:65%;font-size:12px;}
+	#payment_explain img {width:80px;}
+	#price_title {font-size: 20px;}
+	#member_list {font-size:11px;margin:0 2px;}
+	#member_list td span.list_font1 {font-size:14px;font-weight:bold;}
+	#payment_notes {margin:0 2px;}
+	#payment_notes div {font-size: 15px;}
+	#payment_notes li {font-size: 11px;}
+	div.recommend img{top:-218px;left:77px;}
+	ul.products-grid li {width:140px;height:160px;	margin:5px;}
+	div.actions div.btn-cart {width:124px;height:34px;background-image:url(../images/btn_AddPremium_s.png);}
+	div.actions div.btn-cart:hover {background-image:url(../images/btn_AddPremium_s_o.png);}
+	div.regular-price .total_price {font-size:12px;}
+	div.regular-price div.course_name {font-size:26px;}
+	div.regular-price div.course_name .course_name_char {font-size:12px;}
+	div.regular-price div.montly_detail {font-size:12px;}
+	div.regular-price div.montly_detail .montly_price {font-size:24px;}
+	/*** Pricing page2 ***/
+	#main_checkout {width:98%;margin-bottom:10px;margin:0 2px;}
+	#pricing_main {width:98%;margin:5px}
+	#pricing_side {display:none;}
+	#pricing_main h1 {font-size: 20px;}
+	#checkoutSteps li {width:98%;}
+	#checkout-step-billing, #checkout-step-payment , #checkout-review-load {padding-left:10px;}
 }

@@ -31,6 +31,41 @@
  * @see Mage_Catalog_Block_Product_List
  */
 ?>
+<div id="price_title">プレミアム会員 料金一覧</div>
+<?php 
+// Initialise current product object
+if(! Mage::registry('current_product')){
+     Mage::register('current_product', Mage::getModel('catalog/product'));
+}
+// get current product id
+$id = Mage::registry('current_product')->getId(); 
+
+// initialise productlessmon model so that lessson_id can be automatically assinged by getLessonId() method
+$plM = Mage::getModel('lesson/jpproductlesson');
+$plM->product_id = $id; // this will makek sure lesson_id is assigned from now, the following code can use it
+
+// initialise vacobulary model
+$vocabularyM = Mage::getModel('lesson/jpvocabulary');
+// Retrieve all vocabularies from current lesson 
+$vocabularies = $vocabularyM->getVocabulary();
+
+// initialise dialogue model
+$dialogueM = Mage::getModel('lesson/jpdialogue');
+// Retrieve all vocabularies from current lesson 
+$dialogues = $dialogueM->getDialogue();
+// initialise Exetype model
+$exeM = Mage::getModel('lesson/jpexetype');
+
+$customerId = Mage::getSingleton('customer/session')->getId();
+// initialise customerlesson model
+$clM = Mage::getModel('lesson/jpcustomerlesson');
+$clM->setCustomerId($customerId);
+$clM->setProductId($id);
+$productStatus = $clM->getProductStatus();
+$productFavorite = $clM->getFavoriteStatus();
+
+?>
+
 <?php
     $_productCollection=$this->getLoadedProductCollection();
     $_helper = $this->helper('catalog/output');
@@ -47,7 +82,6 @@
     <?php foreach ($_productCollection as $_product): ?>
         <li class="item<?php if( ++$_iterator == sizeof($_productCollection) ): ?> last<?php endif; ?>">
             <?php // Product Image ?>
-            <a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" class="product-image"><img src="<?php echo $this->helper('catalog/image')->init($_product, 'small_image')->resize(135); ?>" width="135" height="135" alt="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" /></a>
             <?php // Product description ?>
             <div class="product-shop">
                 <div class="f-fix">
@@ -94,15 +128,16 @@
         <ul class="products-grid">
         <?php endif ?>
             <li class="item<?php if(($i-1)%$_columnCount==0): ?> first<?php elseif($i%$_columnCount==0): ?> last<?php endif; ?>">
-                <a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" class="product-image"><img src="<?php echo $this->helper('catalog/image')->init($_product, 'small_image')->resize(135); ?>" width="135" height="135" alt="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" /></a>
+            	<!-- AnDisplay System Product-name
                 <h2 class="product-name"><a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $this->stripTags($_product->getName(), null, true) ?>"><?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?></a></h2>
+                 -->
                 <?php if($_product->getRatingSummary()): ?>
                 <?php echo $this->getReviewsSummaryHtml($_product, 'short') ?>
                 <?php endif; ?>
                 <?php echo $this->getPriceHtml($_product, true) ?>
                 <div class="actions">
                     <?php if($_product->isSaleable()): ?>
-                        <button type="button" title="<?php echo $this->__('Add to Cart') ?>" class="button btn-cart" onclick="setLocation('<?php echo $this->getAddToCartUrl($_product) ?>')"><span><span><?php echo $this->__('Add to Cart') ?></span></span></button>
+                        <div type="button" title="<?php echo $this->__('Add to Cart') ?>" class="button btn-cart" onclick="setLocation('<?php echo $this->getAddToCartUrl($_product) ?>')"><span><span><?php echo $this->__('') ?></span></span></div>
                     <?php else: ?>
                         <p class="availability out-of-stock"><span><?php echo $this->__('Out of stock') ?></span></p>
                     <?php endif; ?>
@@ -117,6 +152,10 @@
                     </ul>
                     <?php endif;?>
                 </div>
+                <!-- 3month of product only display recommend mark -->
+                <?php if($_helper->productAttribute($_product, $_product->getName(), 'name') == "モバイル中国語教室プレミアム会員 ３ヶ月プラン"): ?>
+                <div class="recommend"><img src="<?php echo $this->getSkinUrl('images/icn_recommend.png');?>"></div>
+                <?php endif; ?>
             </li>
         <?php if ($i%$_columnCount==0 || $i==$_collectionSize): ?>
         </ul>
@@ -125,6 +164,28 @@
         <script type="text/javascript">decorateGeneric($$('ul.products-grid'), ['odd','even','first','last'])</script>
     <?php endif; ?>
 
+    <div id="payment_explain">
+    <a onclick="javascript:window.open('https://www.paypal.com/jp/cgi-bin/webscr?cmd=xpt/Marketing/popup/OLCWhatIsPayPal-outside','olcwhatispaypal','toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, ,left=0, top=0, width=400, height=350'); return false;" href="https://www.paypal.com/jp/cgi-bin/webscr?cmd=xpt/Marketing/popup/OLCWhatIsPayPal-outside"><img src="<?php echo $this->getSkinUrl('images/logo_paypal.jpg');?>" /></a>
+    <span>お客様のセキュリティ確保のため、PayPalを使用してのお支払いとなります。<br>
+          当サイト内にお客様のお客様のクレジット情報は一切保存されませんのでご安心下さい。</span>
+    </div>
+    <div style="clear:both;"></div>
+	<table id="member_list">
+		<tr><td class="list_line1 list_line2"></td><td class="list_line1 list_line2"><span class="list_font1">一般会員</span><br><span class="list_font3">無料会員</span></td><td class="list_line1"><span class="list_font1 list_font2">プレミアム会員</span><br><span class="list_font2">有料会員</span></td></tr>
+		<tr><td class="list_line2 list_line3"><span class="list_font1">学費</span></td><td class="list_line2 list_line3">―</td><td class="list_line3">1ヶ月プラン (¥1000/月)<br>3ヶ月プラン (¥700/月)<br>6ヶ月プラン (¥500/月)</td></tr>
+		<tr><td class="list_line2"><span class="list_font1">利用可能な<br>コンテンツ</span></td><td class="list_line2">各レベルの１～３課のみ</td><td>全てのコンテンツ</td></tr>
+	</table>
+	<div id="payment_notes">
+		<div>注意事項</div>
+		<ul>
+			<li>お申込みされたその日からプレミアム会員の特典が受けられます。</li>
+			<li>お支払いはセキュリティの高いPaｙPalでの支払のみ対応しています。</li>
+			<li>契約期間中に別のプランへ変更することはできません。</li>
+			<li>お支払い完了後の払い戻しは行っておりませんのでご了承ください</li>
+		</ul>
+	</div>
+	
+	
     <div class="toolbar-bottom">
     <?php if(Mage::registry('current_category')->getId()!=11) { echo $this->getToolbarHtml(); } ?>
     </div>

@@ -28,14 +28,14 @@
 <?php $_order = $this->getOrder() ?>
 <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
 <div class="page-title title-buttons">
-    <h1><?php echo $this->__('Order #%s - %s', $_order->getRealOrderId(), $_order->getStatusLabel()) ?></h1>
-    <?php echo $this->getChildHtml('buttons') ?>
+    <h1><?php echo $this->__('ご注文番号:%s - %s', $_order->getRealOrderId(), $_order->getStatusLabel()) ?></h1>
+    <?php //echo $this->getChildHtml('buttons') ?>
 </div>
 <?php echo $this->getStatusHistoryRssUrl($_order) ?>
 <dl class="order-info">
-    <dt><?php echo $this->__('About This Order:') ?></dt>
+    <dt><?php echo $this->__('お支払い詳細情報') ?></dt>
     <dd>
-        <?php $_links = $this->getLinks(); ?>
+        <!--<?php $_links = $this->getLinks(); ?>
         <ul id="order-info-tabs">
         <?php foreach ($_links as $_link): ?>
             <?php if($_link->getUrl()): ?>
@@ -44,11 +44,11 @@
                 <li class="current"><?php echo $_link->getLabel() ?></li>
             <?php endif; ?>
         <?php endforeach; ?>
-        </ul>
+        </ul>-->
         <script type="text/javascript">decorateGeneric($('order-info-tabs').select('LI'),['first','last']);</script>
     </dd>
 </dl>
-<p class="order-date"><?php echo $this->__('Order Date: %s', $this->formatDate($_order->getCreatedAtStoreDate(), 'long')) ?></p>
+<p class="order-date"><?php echo $this->__('日付: %s', $this->formatDate($_order->getCreatedAtStoreDate(), 'long')) ?></p>
 <?php if (!$_order->getIsVirtual()): ?>
 <div class="col2-set order-info-box">
     <div class="col-1">
@@ -81,7 +81,7 @@
     <div class="col-1">
         <div class="box">
             <div class="box-title">
-                <h2><?php echo $this->__('Billing Address') ?></h2>
+                <h2><?php echo $this->__('請求先情報') ?></h2>
             </div>
             <div class="box-content">
                 <address><?php echo $_order->getBillingAddress()->format('html') ?></address>
@@ -91,7 +91,7 @@
     <div class="col-2">
         <div class="box box-payment">
             <div class="box-title">
-                <h2><?php echo $this->__('Payment Method') ?></h2>
+                <h2><?php echo $this->__('お支払い方法') ?></h2>
             </div>
             <div class="box-content">
                 <?php echo $this->getPaymentInfoHtml() ?>

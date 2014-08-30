@@ -25,18 +25,18 @@
  */
 ?>
 <div class="page-title">
-    <h1><?php echo $this->__('Your order has been received.') ?></h1>
+    <h1><?php echo $this->__('ご注文を受け付けました') ?></h1>
 </div>
 <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
-<h2 class="sub-title"><?php echo $this->__('Thank you for your purchase!') ?></h2>
+<h2 class="sub-title"><?php echo $this->__('ご購入ありがとうございました!') ?></h2>
 
 <?php if ($this->getOrderId()):?>
 <?php if ($this->getCanViewOrder()) :?>
-    <p><?php echo $this->__('Your order # is: %s.', sprintf('<a href="%s">%s</a>', $this->escapeHtml($this->getViewOrderUrl()), $this->escapeHtml($this->getOrderId()))) ?></p>
+    <p><?php echo $this->__('ご注文番号: %s.', sprintf('<a href="%s">%s</a>', $this->escapeHtml($this->getViewOrderUrl()), $this->escapeHtml($this->getOrderId()))) ?></p>
 <?php  else :?>
-    <p><?php echo $this->__('Your order # is: %s.', $this->escapeHtml($this->getOrderId())) ?></p>
+    <p><?php echo $this->__('ご注文番号: %s.', sprintf('<a href="%s">%s</a>', $this->escapeHtml($this->getViewOrderUrl()), $this->escapeHtml($this->getOrderId()))) ?></p>
 <?php endif;?>
-    <p><?php echo $this->__('You will receive an order confirmation email with details of your order and a link to track its progress.') ?></p>
+    <p><?php echo $this->__('ご注文内容を記載しましたメールをお送りしましたのでご確認下さい。') ?></p>
 <?php if ($this->getCanViewOrder() && $this->getCanPrintOrder()) :?>
     <p>
         <?php echo $this->__('Click <a href="%s" onclick="this.target=\'_blank\'">here to print</a> a copy of your order confirmation.', $this->getPrintUrl()) ?>
@@ -60,5 +60,5 @@
 <?php endif;?>
 
 <div class="buttons-set">
-    <button type="button" class="button" title="<?php echo $this->__('Continue Shopping') ?>" onclick="window.location='<?php echo $this->getUrl() ?>'"><span><span><?php echo $this->__('Continue Shopping') ?></span></span></button>
+    <button type="button" class="button" title="<?php echo $this->__('fa') ?>" onclick="window.location='<?php echo Mage::getBaseUrl().'customer/account/index';?>'"><span><span><?php echo $this->__('学習を続ける') ?></span></span></button>
 </div>

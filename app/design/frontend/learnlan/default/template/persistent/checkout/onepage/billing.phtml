@@ -51,7 +51,7 @@ Rows matched: 1  Changed: 1  Warnings: 0
     <ul class="form-list">
     <?php if ($this->customerHasAddresses()): ?>
         <li class="wide">
-            <label for="billing-address-select"><?php echo $this->__('Select a billing address from your address book or enter a new address.') ?></label>
+            <label for="billing-address-select"><?php echo $this->__('請求先情報を選択するか新しく入力して下さい。') ?></label>
             <div class="input-box">
                 <?php echo $this->getAddressesHtmlSelect('billing') ?>
             </div>
@@ -61,10 +61,10 @@ Rows matched: 1  Changed: 1  Warnings: 0
         <fieldset>
             <input type="hidden" name="billing[address_id]" value="<?php echo $this->getAddress()->getId() ?>" id="billing:address_id" />
             <ul>
-                <li class="fields"><?php echo $this->getLayout()->createBlock('customer/widget_name')->setObject($this->getAddress()->getFirstname() ? $this->getAddress() : $this->getQuote()->getCustomer())->setForceUseCustomerRequiredAttributes(!$this->isCustomerLoggedIn())->setFieldIdFormat('billing:%s')->setFieldNameFormat('billing[%s]')->toHtml() ?></li>
+                <li class="fields"><label for="billing:name"><?php echo $this->__('名前') ?></label><?php echo $this->getLayout()->createBlock('customer/widget_name')->setObject($this->getAddress()->getFirstname() ? $this->getAddress() : $this->getQuote()->getCustomer())->setForceUseCustomerRequiredAttributes(!$this->isCustomerLoggedIn())->setFieldIdFormat('billing:%s')->setFieldNameFormat('billing[%s]')->toHtml() ?></li>
                 <li class="fields">
                     <div class="field">
-                        <label for="billing:company"><?php echo $this->__('Company') ?></label>
+                        <label for="billing:company"><?php echo $this->__('会社名') ?></label>
                         <div class="input-box">
                             <input type="text" id="billing:company" name="billing[company]" value="<?php echo $this->escapeHtml($this->getAddress()->getCompany()) ?>" title="<?php echo $this->__('Company') ?>" class="input-text <?php echo $this->helper('customer/address')->getAttributeValidationClass('company') ?>" />
                         </div>
@@ -106,9 +106,28 @@ Rows matched: 1  Changed: 1  Warnings: 0
                 <?php endif; ?>
                 <li class="fields">
                     <div class="field">
-                        <label for="billing:city" class="required"><em>*</em><?php echo $this->__('City') ?></label>
+                        <label for="billing:city" class="required"><?php echo $this->__('都道府県') ?><em>*</em></label>
                         <div class="input-box">
-                            <input type="text" title="<?php echo $this->__('City') ?>" name="billing[city]" value="<?php echo $this->escapeHtml($this->getAddress()->getCity()) ?>" class="input-text <?php echo $this->helper('customer/address')->getAttributeValidationClass('city') ?>" id="billing:city" />
+                        	<select title="<?php echo $this->__('City') ?>" name="billing[city]"  id="billing:city" >
+								<option value="北海道">北海道</option><option value="青森県">青森県</option><option value="秋田県">秋田県</option>
+								<option value="岩手県">岩手県</option><option value="山形県">山形県</option><option value="宮城県">宮城県</option>
+								<option value="福島県">福島県</option><option value="新潟県">新潟県</option><option value="群馬県">群馬県</option>
+								<option value="栃木県">栃木県</option><option value="茨城県">茨城県</option><option value="千葉県">千葉県</option>
+								<option value="埼玉県">埼玉県</option><option value="東京都">東京都</option><option value="神奈川県">神奈川県</option>
+								<option value="静岡県">静岡県</option><option value="山梨県">山梨県</option><option value="長野県">長野県</option>
+								<option value="富山県">富山県</option><option value="石川県">石川県</option><option value="福井県">福井県</option>
+								<option value="滋賀県">滋賀県</option><option value="岐阜県">岐阜県</option><option value="愛知県">愛知県</option>
+								<option value="三重県">三重県</option><option value="奈良県">奈良県</option><option value="和歌山県">和歌山県</option>
+								<option value="大阪府">大阪府</option><option value="京都府">京都府</option><option value="兵庫県">兵庫県</option>
+								<option value="岡山県">岡山県</option><option value="鳥取県">鳥取県</option><option value="島根県">島根県</option>
+								<option value="広島県">広島県</option><option value="山口県">山口県</option><option value="香川県">香川県</option>
+								<option value="徳島県">徳島県</option><option value="愛媛県">愛媛県</option><option value="高知県">高知県</option>
+								<option value="福岡県">福岡県</option><option value="佐賀県">佐賀県</option><option value="長崎県">長崎県</option>
+								<option value="大分県">大分県</option><option value="宮崎県">宮崎県</option><option value="熊本県">熊本県</option>
+								<option value="鹿児島県">鹿児島県</option><option value="沖縄県">沖縄県</option><option value="その他">その他</option>
+                        	</select>
+                            <!--  <input type="text" title="<?php echo $this->__('City') ?>" name="billing[city]" value="<?php echo $this->escapeHtml($this->getAddress()->getCity()) ?>" class="input-text <?php echo $this->helper('customer/address')->getAttributeValidationClass('city') ?>" id="billing:city" />-->
+                            
                         </div>
                     </div>
                     <!--  
@@ -138,7 +157,7 @@ Rows matched: 1  Changed: 1  Warnings: 0
                     </div>
                     -->
                     <div class="field">
-                        <label for="billing:country_id" class="required"><em>*</em><?php echo $this->__('Country') ?></label>
+                        <label for="billing:country_id" class="required"><?php echo $this->__('国/地域') ?><em>*</em></label>
                         <div class="input-box">
                             <?php echo $this->getCountryHtmlSelect('billing') ?>
                         </div>
@@ -223,8 +242,8 @@ Rows matched: 1  Changed: 1  Warnings: 0
         <input type="hidden" name="billing[use_for_shipping]" value="1" />
     <?php endif; ?>
     <div class="buttons-set" id="billing-buttons-container">
-        <p class="required"><?php echo $this->__('* Required Fields') ?></p>
-        <button type="button" title="<?php echo $this->__('Continue') ?>" class="button" onclick="billing.save()"><span><span><?php echo $this->__('Continue') ?></span></span></button>
+        <p class="required"><?php echo $this->__('* 必須項目') ?></p>
+        <button type="button" title="<?php echo $this->__('Continue') ?>" class="button" onclick="billing.save()"><span><span><?php echo $this->__('次へ') ?></span></span></button>
         <span class="please-wait" id="billing-please-wait" style="display:none;">
             <img src="<?php echo $this->getSkinUrl('images/opc-ajax-loader.gif') ?>" alt="<?php echo $this->__('Loading next step...') ?>" title="<?php echo $this->__('Loading next step...') ?>" class="v-middle" /> <?php echo $this->__('Loading next step...') ?>
         </span>

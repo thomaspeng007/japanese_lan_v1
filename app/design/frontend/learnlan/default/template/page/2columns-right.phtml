@@ -33,24 +33,29 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $this->getLang() ?>" lang="<?php echo $this->getLang() ?>">
 <head>
 <?php echo $this->getChildHtml('head') ?>
+<script type="text/javascript" src="http://127.0.0.1/magento/skin/frontend/learnlan/default/js/footerFixed.js"></script>
 </head>
 <body<?php echo $this->getBodyClass()?' class="'.$this->getBodyClass().'"':'' ?>>
 <?php echo $this->getChildHtml('after_body_start') ?>
 <div class="wrapper">
     <?php echo $this->getChildHtml('global_notices') ?>
     <div class="page">
-        <?php echo $this->getChildHtml('header') ?>
+	    <div id="header">
+	        <?php echo $this->getChildHtml('header') ?>
         <div class="main-container col2-right-layout">
-            <div class="main">
-                <?php echo $this->getChildHtml('breadcrumbs') ?>
-                <div class="col-main">
-                    <?php echo $this->getChildHtml('global_messages') ?>
-                    <?php echo $this->getChildHtml('content') ?>
-                </div>
-                <div class="col-right sidebar"><?php echo $this->getChildHtml('right') ?></div>
+            <div id="main_checkout">
+                <?php // echo $this->getChildHtml('breadcrumbs') ?>
+                <!-- <div class="col-main">-->
+                <?php echo $this->getChildHtml('global_messages') ?>
+                <?php echo $this->getChildHtml('content') ?>
+                <?php echo $this->getChildHtml('right') ?>
+                <!-- </div>-->
+                <div class="col-right sidebar"><?php // echo $this->getChildHtml('right') ?></div>
             </div>
         </div>
-        <?php echo $this->getChildHtml('footer') ?>
+        <div id="footer">
+        	<?php echo $this->getChildHtml('footer') ?>
+        </div>
         <?php echo $this->getChildHtml('global_cookie_notice') ?>
         <?php echo $this->getChildHtml('before_body_end') ?>
     </div>
