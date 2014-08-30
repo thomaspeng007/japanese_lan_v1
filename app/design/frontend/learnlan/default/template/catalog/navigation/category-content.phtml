@@ -1,3 +1,16 @@
+<?php 
+// 3 is the id of learnlan, all categories are under learnlan
+ $_category = Mage::getModel('catalog/category')->load(3);    
+    $_categories = $_category
+                    ->getCollection()
+                    ->addAttributeToFilter('is_active', 1)
+                    ->addAttributeToSelect(array('name', 'description', 'url_key'))
+                    ->addIdFilter($_category->getChildren());
+
+ // get current category ID, if current_category is not available return root category id, which is also OK
+$currentCatId = Mage::getModel('catalog/layer')->getCurrentCategory()->getId();
+?>
+
 <div id="main">
 	<h3 class="subtitle">課文一覧</h3>	
 	
@@ -5,16 +18,25 @@
     /**
      * @todo if this is for mobile, then need to move to other template?
      */?>
-	<!--  
+	<!--  -->
 	<div class="mobile_menu">
 		<ul>
-			<li class="mobile_menu_active"><a href="#"><img src="<?php //echo $this->getSkinUrl('images/list_style.png');?>" /> 入門</a></li>
-			<li><a href="#"><img src="<?php //echo $this->getSkinUrl('images/list_style.png');?>" /> 初級</a></li>
-			<li><a href="#"><img src="<?php //echo $this->getSkinUrl('images/list_style.png');?>" /> 中級</a></li>
-			<li><a href="#"><img src="<?php //echo $this->getSkinUrl('images/list_style.png');?>" /> 高級</a></li>
+			<?php foreach ($_categories as $_category): ?>
+			<li <?php if($currentCatId == $_category->getId()){ echo 'class="mobile_menu_active"'; } ?>>
+			    <!-- enable category beginner(4) and primary(5) -->
+			    <?php $allowedPublishCateId = array('4','5') ?>
+			    <?php if(in_array($_category->getId(), $allowedPublishCateId)):?>
+			    <a href="<?php echo $_category->getUrl(); ?>"><img src="<?php echo $this->getSkinUrl('images/list_style.png');?>" /><?php echo $_category->getName();?>
+			    </a>
+			    <?php else:?>
+			    <img src="<?php echo $this->getSkinUrl('images/list_style.png');?>" /><?php echo $_category->getName();?>
+			    <span class="comingsoon"><img src="<?php echo $this->getSkinUrl('images/comingsoon.png');?>" /></span>	
+			    <?php endif;?>
+			</li>
+			<?php endforeach;?>			
 		</ul>
 	</div>
-	-->
+	
 	
 <?php $_helper = Mage::helper('catalog/category') ?>
 <?php $_categories = $_helper->getStoreCategories() ?>
