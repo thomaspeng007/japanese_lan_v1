@@ -1,0 +1,168 @@
+<?php
+$lessonId = $this->getProductId();
+// Initialise ExeType model
+$exeM = Mage::getModel('lesson/jpexetype');
+// Set lesson id
+$exeM->setLessonId($this->getProductId());
+// Return type 1
+$type4 = $exeM->getType(4);
+//var_dump($type3);
+$countType4 = count($type4);
+?> 
+<script>
+$( document ).ready(function() {
+	
+
+	var sinoApp = sinoApp || {};
+
+    // Flashcard will be the default exercise, other exercise will 
+    // have different names
+    sinoApp.exe_grammar_type4 = function() {
+
+    	// Difine next serial if any
+    	ens = $('.exe_next_serial');
+    	ens.click(function (e) {
+        	// serial is a string before convert to number
+    		serial = $(this).attr('serial').trim();
+  
+    		$('#exe_type_serial_' + serial).hide(); 
+       	    $('#exe_type_serial_' + serial).html(''); 
+            $('.exe_next_serial').hide(); 
+            
+       	   // !important Convert string serial to number with parseInt function
+       	   next = parseInt(serial) + 1;
+       	   $('#exe_type_serial_' + next).show(); 
+
+            
+    	});
+    	// Count how many serial number of type3 
+    	<?php echo 'var countSerial = '.json_encode($countType4).';'; ?>
+    	
+        ifc =  $('#exe_grammar_frame_container'); 
+        exe_grammar_frame = $('.exe_grammar_frame'); 
+        //countLi = ifc.find('ul li').length;
+
+        exe_grammar_frame.click(function (e) {      
+
+              // get current serial number
+              serial = $(this).attr('serial');
+              // find out how many li under exe_grammar_answer_container
+              countLi = $('#exe_grammar_answer_container_'+serial).find('ul li').length;
+              // find out question order value
+              questionOrder =    $('#exe_grammar_correct_answer_'+serial).attr('order').trim();   
+              li = $(this).parent();
+              // find out selected value
+              answerOrder = $(this).attr('order').trim();
+              // compare question value and answer value, if equal change
+              // next question value
+              if(questionOrder==answerOrder){
+                    
+                 //Return current question text value
+                 questionText = $('#exe_grammar_correct_answer_'+serial).text().trim(); 
+                 //Return seleted correct answer value
+                 answerValue = $(this).text().trim();
+                 //Update current question text value
+                 updateText = questionText + answerValue;
+                 //Remove selected li 
+                 $('#exe_grammar_frame_wrapper_'+answerOrder).hide();   
+                 //Display update text value
+                 $('#exe_grammar_correct_answer_'+serial).text(updateText);
+                 //Update question order by +1
+                 questionOrder = parseInt(questionOrder);
+                 questionOrder += 1;
+                 $('#exe_grammar_correct_answer_'+serial).attr('order',questionOrder);
+                 //If completed?
+                 if(questionOrder == countLi) {
+                    //Dispaly the completed div format  
+                    $('.exe_grammar_correct_answer_container')
+                       .addClass('exe_grammar_correct_answer_complete_container')
+                       .addClass('exe_grammar_frame_wrapper_green'); 
+                    setTimeout(function(){
+                       $('.exe_grammar_correct_answer_container')
+                       .removeClass("exe_grammar_frame_wrapper_green");}, 1000);
+                    
+                    // Empty serial number div and display the next if availalbe
+                    if(serial<countSerial) {
+      
+                        $('#exe_next_serial_' + serial).show();  
+                        //alert(serial + ' | ' + countSerial);
+                        
+                    } else { // if it's last srial number then Go to next type
+                    	//alert(serial + ' | ' + countSerial);
+                        $('.exe_next_serial_container').hide(); 
+                        $('.exe_continue_next').show(); 
+                    }
+                 } // finish countLi
+              } else {
+                   // incorrect answer
+                   // First to update the score by using ajax to update session
+               score = 1;
+               var dataString = 'score=' + score;
+               $.ajax({
+                        type: "POST",
+                        url: '<?php echo $this->getUrl("chinese-lesson/index/saveScore") ?>',
+                        data: dataString,
+                        cache: false,
+                        //success: function(response) { alert('ok'); }
+               });
+               
+                   li.addClass("exe_grammar_frame_wrapper_red");
+                   li.animate({left:'-10px'},100)
+                     .animate({left:'10px'},100)
+                     .animate({left:'0px'},100);
+                   setTimeout(function(){
+                   li.removeClass("exe_grammar_frame_wrapper_red");}, 500);      
+              }            
+       }); // finish click event  
+    };
+     
+    sinoApp.exe_grammar_type4();
+    
+
+
+});
+
+
+</script>
+
+<div id="exe_container">
+<p class="exe_type_title"><?php echo $exeM->getTypeTitle(4); ?></p>
+ <?php for($i=0; $i<$countType4; $i++) {
+           $type4_target = $type4[$i]['target'];
+           $type4_source = $type4[$i]['source'];
+           $type4_source = $exeM->getType4Arr($type4_source, 'array');	
+           $serialNumber = trim($i + 1); 
+ ?>
+    <div id="exe_type_serial_<?php echo $serialNumber; ?>" 
+               <?php if($serialNumber!=1) { echo "style='display:none'"; } ?> >  <br>
+        <div id="exe_grammar_frame_container">
+            <div id="exe_grammar_question_trans">
+                <p class="exe_grammar_question_p"><?php echo $type4_target; ?></p>     
+            </div>
+            <div class="exe_grammar_correct_answer_container">
+                <div id="exe_grammar_correct_answer_<?php echo $serialNumber; ?>" class="exe_grammar_correct_answer" order="0" ></div>  
+            </div>
+            <hr></hr> 
+            <div class="exe_grammar_answer_container" id="exe_grammar_answer_container_<?php echo $serialNumber; ?>">   
+                <ul>
+    	            <?php foreach($type4_source as $order=>$value) { ?>
+                    <li class="exe_grammar_frame_wrapper" id="exe_grammar_frame_wrapper_<?php echo $order; ?>">
+                        <div class="exe_grammar_frame" serial="<?php echo $serialNumber; ?>" order="<?php echo $order; ?>"><?php echo $value; ?></div>
+                    </li>
+                    <?php } ?>  
+                </ul>
+            </div>  
+         </div>   
+    </div> <!-- finsih exe_type_serial Number --> 
+    <div class="exe_next_serial_container">
+        <div style="display:none;" id="exe_next_serial_<?php echo $serialNumber; ?>" class="exe_next_serial" serial="<?php echo $serialNumber; ?>"  >
+           <button>
+               <img src="<?php echo $this->getSkinUrl('images/exe_next_btn.gif');?>" alt="Submit"
+                  onmouseover="this.src='<?php echo $this->getSkinUrl('images/exe_next_btn_hover.gif');?>';"
+                  onmouseout="this.src='<?php echo $this->getSkinUrl('images/exe_next_btn.gif');?>';">
+           </button>
+        </div>
+    </div>
+    <?php  } ?>
+    
+</div><!-- finish exe_contaier -->    

@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+    <config>
+        <modules>
+            <Chinese_Review>
+                <version>0.1.0</version>
+            </Chinese_Review>
+        </modules>
+             
+    <frontend>
+        <routers>
+            <review>
+                <args>
+                    <modules>
+                        <chinese_review before="Mage_review">Chinese_Review</chinese_review>
+                    </modules>
+                </args>
+            </review>
+        </routers>
+    </frontend>
+
+  </config>

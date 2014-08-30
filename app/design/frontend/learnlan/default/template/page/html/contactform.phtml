@@ -1,0 +1,21 @@
+<div id="main01">
+	<div id="main_center">
+		<div id="contact">
+			<h3 class="subtitle"><img src="<?php echo $this->getSkinUrl('images/icn_circle.png');?>" />お問い合わせ</h3>	
+			<form id="form1" name="form1" method="post" action="" class="contact_form">
+				<dl id="content_text">
+					<dt>お名前<span class="text_red">*</span></dt>
+					<dd><input type="text" name="entry_name" id="entry_name" value="" class="entry_text" /></dd>
+					<dt>メールアドレス<span class="text_red">*</span></dt>
+					<dd><input type="text" name="entry_email" id="entry_email" value="" class="entry_text" /></dd>
+				</dl>
+				<div id="input_area">
+					<h4>お問い合わせ内容<span class="text_red">*</span></h4>    
+					<p><textarea name="entry_comment" id="entry_comment"></textarea></p>
+				</div>
+				<input type="submit" name="content_submit" value="送信" id="entry_submit" >
+			</form>
+		</div>
+	</div>
+</div><!--End main01-->
+

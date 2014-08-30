@@ -1,0 +1,266 @@
+<?php 
+// Initialise current product object
+if(! Mage::registry('current_product')){
+     Mage::register('current_product', Mage::getModel('catalog/product'));
+}
+// get current product id
+$id = Mage::registry('current_product')->getId(); 
+
+// initialise productlessmon model so that lessson_id can be automatically assinged by getLessonId() method
+$plM = Mage::getModel('lesson/jpproductlesson');
+$plM->product_id = $id; // this will makek sure lesson_id is assigned from now, the following code can use it
+
+// initialise vacobulary model
+$vocabularyM = Mage::getModel('lesson/jpvocabulary');
+// Retrieve all vocabularies from current lesson 
+$vocabularies = $vocabularyM->getVocabulary();
+
+// initialise dialogue model
+$dialogueM = Mage::getModel('lesson/jpdialogue');
+// Retrieve all vocabularies from current lesson 
+$dialogues = $dialogueM->getDialogue();
+// initialise Exetype model
+$exeM = Mage::getModel('lesson/jpexetype');
+
+$customerId = Mage::getSingleton('customer/session')->getId();
+// initialise customerlesson model
+$clM = Mage::getModel('lesson/jpcustomerlesson');
+$clM->setCustomerId($customerId);
+$clM->setProductId($id);
+$productStatus = $clM->getProductStatus();
+$productFavorite = $clM->getFavoriteStatus();
+
+?>
+
+
+
+
+	<div class="hide"><div class="hide_btn">▲隠す</div></div>
+	
+	<div class="tabs">
+		<ul>
+			<li style="z-index:9;"><a href="#" title="" rel="tab-1" id="tabs_dia" class="active"><span>課　文</span></a></li>
+			<li style="z-index:8;"><a href="#" title="" rel="tab-2" id="tabs_voc"><span>単　語</span></a></li>
+			<li style="z-index:7;"><a href="#" title="" rel="tab-3" id="tabs_pra"><span>練　習</span></a></li>
+			<li style="z-index:6;" class="tabs_text"><a href="#" title="" rel="tab-4" id="tabs_gra"><span>文　法</span></a></li>
+			<li style="z-index:5;" class="tabs_text"><a href="#" title="" rel="tab-5"><span><img src="<?php echo $this->getSkinUrl('images/logo_skype.png');?>" /></span></a></li>
+		</ul>
+
+		<div class="main03_3">
+		<!-- Finish Mark -->
+			<div id="lesson_finish" <?php if($productStatus) { echo 'class="add_mark"'; } ?>>学習終了</div>
+			<!-- for mobile -->
+			<div id="lesson_finish_s" <?php if($productStatus) { echo 'class="add_mark"'; } ?> ></div>
+		<!-- Favorite Mark -->
+			<div id="lesson_add" <?php if($productFavorite) { echo 'class="add_mark"'; } ?>>お気に入り</div>
+			<!-- for mobile -->
+			<div id="lesson_add_s" <?php if($productFavorite) { echo 'class="add_mark"'; } ?>></div>
+		</div>
+	</div><!--End tabs-->
+		
+	<div class="tab-panel">
+	
+		<div class="tab-content active" id="tab-1">
+			<article class="dialogue">
+				<div class="exe_audio_container"><audio id="dia_audio_1" preload="auto" tabindex="0" controls="" type="audio/mpeg">
+					<source type="audio/mp3" src="<?php echo $dialogueM->getAudioUrl().'1.mp3'; ?>"></source>Sorry, your browser does not support HTML5 audio.</audio>
+				</div>
+    
+				<ul id="dia_playlist"> 
+				    <button type="button" id="dia_play" >再生 ></button>
+				    <button type="button" id="dia_stop" >停止</button>
+				    <button type="button" id="dia_pinyin" >ピンインON</button>
+				    <button type="button" id="dia_trans" >日本語訳ON</button>
+				    
+				     <?php 
+                     /**
+                      * @todo need to find a better solution for below code for the replacement of ',' '.' for Japanese and Chinese
+                      */
+                    ?>
+				    <?php $audio_id = 0; $s = 0;?>
+				    <?php foreach($dialogues as $dialogue):?>
+				    <?php         $audio_id++;
+				     // Convert the source sentence to pinyin
+				     $pinyinNumber = Mage::helper('lesson/pinyin')->converPinyinNumberToToneMark(Mage::helper('lesson/pinyin')->convertCharToPinyin($exeM->convertTextSource($dialogue->getSource())));
+				     $pinyinNumber = explode(' ', $pinyinNumber);
+				     $pinyinNumArr = array();
+				     $pinyinCount = count($pinyinNumber);
+				     $i = 0;
+				     foreach ($pinyinNumber as $pinNum) {
+				     	$i++;
+				     	if(trim($pinNum)=='ā' || trim($pinNum)=='阿ā') { $pinNum = ','; }
+				     	if($i == $pinyinCount && $pinNum==',') { $pinNum = ''; }    	
+				     	array_push($pinyinNumArr, $pinNum);
+				     } //var_dump($pinyinNumArr);
+				     foreach($pinyinNumArr as $pin){
+				     	$pinyin .= $pin." ";
+				     }
+				     ?>
+				    <li>      
+				        <a href="<?php echo $dialogueM->getAudioUrl().$audio_id.'.mp3'; ?>">
+						<p class="dia_pinyin"><?php echo $pinyin; unset($pinyin);?></p>
+						<p class="dia_sentence"><span class="dia_speaker"><?php echo $dialogue->getActor();?>: </span><?php echo $exeM->convertTextSource($dialogue->getSource());?></p>
+						<p class="dia_trans"><?php echo $dialogue->getTarget();?></p>
+						</a> 
+				    </li>    
+				    <?php endforeach;?>
+				  
+				</ul>
+				<div class="btn_jump">
+					<div class="btn_jump_voc">単語を見る<img src="<?php echo $this->getSkinUrl('images/icn_voc.png');?>" /></div>
+					<div class="btn_jump_pra">練習に進む<img src="<?php echo $this->getSkinUrl('images/icn_pra.png');?>" /></div>
+				</div>
+			</article>
+            <?php echo $this->getChildHtml('product_review') ?>
+		</div>
+		
+		<!-- Start tab 2 for vocabulary -->
+		<div class="tab-content" id="tab-2">
+		        <div style="display:none"><audio id="dia_audio_2" preload="auto" tabindex="0" controls="" type="audio/mpeg">
+					<source type="audio/mp3" ></source>Sorry, your browser does not support HTML5 audio.</audio>
+				</div>
+			<table>
+			<tr class="ItemName"><td id="ItemName_ch" class="Item_ch">中国語</td><td id="ItemName_pin" class="Item_pin">ピンイン</td><td id="ItemName_jp" class="Item_jp">日本語</td><td id="ItemName_audio" class="Item_audio"><div class="Item_text">聞く</div></td><!--  <li id="ItemName_add" class="Item_add"><div class="Item_text">単語登録</div></li> --></tr>
+		    <?php  foreach($vocabularies as $vocabulary) :?>	
+			<?php          $audio_v_id = str_replace(' ', '', $vocabulary->getPinyin()); ?>         
+			<tr class="Item">
+				<td class="Item_ch" ><?php echo $vocabulary->getSource();?><div class="Item_pin_s"><?php echo Mage::helper('lesson/pinyin')->converPinyinNumberToToneMark($vocabulary->getPinyin());?></div></td>
+				<td class="Item_pin"><?php echo Mage::helper('lesson/pinyin')->converPinyinNumberToToneMark($vocabulary->getPinyin());?></td>
+				<td class="Item_jp" ><?php echo $vocabulary->getTarget();?></td>
+				<td class="Item_audio"><a href="<?php echo $vocabularyM->getAudioUrl().$audio_v_id.'.mp3' ?>" class="voc_play"><img src="<?php echo $this->getSkinUrl('images/icn_audio.gif');?>" /></a></td>
+				<!-- 
+				<li class="Item_add" > 
+				    <a><img src="<?php //echo $this->getSkinUrl('images/icn_addcard.gif');?>" /></a>  
+				</li>
+			    -->
+			</tr>
+		    <?php endforeach;?>	
+		    </table>
+		    
+		    <div class="btn_jump">
+				<div class="btn_jump_dia">課文を見る<img src="<?php echo $this->getSkinUrl('images/icn_dia.png');?>" /></div>
+				<div class="btn_jump_pra">練習に進む<img src="<?php echo $this->getSkinUrl('images/icn_pra.png');?>" /></div>
+			</div>							
+		</div>
+		<!--End tab-2-->
+		
+
+      <script type="text/javascript">
+$( document ).ready(function() {
+
+    $("#lesson_finish, #lesson_finish_s").click(function(){ 
+
+    	if ($(this).hasClass('add_mark')) {
+    		$(this).removeClass('add_mark'); 
+        } else {
+            $(this).addClass('add_mark'); 
+        }
+        
+	   var dataString = 'productId=' + <?php echo $id; ?> + '&customerId=' + <?php echo $customerId;?>;
+	  
+       $.ajax({
+                type: "POST",
+                url: '<?php echo $this->getUrl("chinese-lesson/index/customerProductStatus") ?>',
+                data: dataString,
+                cache: false,
+       });
+       
+   });
+
+    $("#lesson_add, #lesson_add_s").click(function(){ 
+
+    	if ($(this).hasClass('add_mark')) {
+    		$(this).removeClass('add_mark'); 
+        } else {
+            $(this).addClass('add_mark'); 
+        }
+        
+ 	   var dataString = 'productId=' + <?php echo $id; ?> + '&customerId=' + <?php echo $customerId;?>;
+ 	   
+        $.ajax({
+                 type: "POST",
+                 url: '<?php echo $this->getUrl("chinese-lesson/index/customerFavorite") ?>',
+                 data: dataString,
+                 cache: false,
+        });
+        
+    });
+	
+   $(".exe_continue_next>button").click(function(){ 
+	   $('#loadingDiv').show();  
+	   type =  $('.exe_continue_next').attr('type').trim();
+	   type = parseInt(type);
+	   
+	   $('.exe_continue_next').hide();
+	   
+	   $("#tab-3-wrapper").load(    
+			    '<?php echo $this->getUrl("chinese-lesson/index/index") ?>',
+			    {type:type, productId:<?php echo $id ?>},
+			    function(responseTxt,statusTxt,xhr){
+				    if(statusTxt=="success")
+				       $('#loadingDiv').hide();
+				      //alert("External content loaded successfully!");
+				    if(statusTxt=="error")
+				      alert("Error: "+xhr.status+": "+xhr.statusText);
+			});
+	   next = type + 1;
+	   type =  $('.exe_continue_next').attr('type', next).trim();
+	  
+   });
+});
+</script>
+<div id='loadingDiv' style="display:none; position: relative; margin-left:30%;">
+    Please wait...  <img src="<?php echo $this->getSkinUrl('images/ajax-loader.gif');?>" />
+    </div>
+<div class="tab-content" id="tab-3">
+<!-- below code for exe tab3 content -->
+   <div id="tab-3-wrapper"> 
+        <div class="exe_continue_next" type="1" >
+           <button>
+               <img src="<?php echo $this->getSkinUrl('images/exe_start.gif');?>" alt="Submit"
+                  onmouseover="this.src='<?php echo $this->getSkinUrl('images/exe_start_hover.gif');?>';"
+                  onmouseout="this.src='<?php echo $this->getSkinUrl('images/exe_start.gif');?>';">
+           </button>
+        </div>
+    </div>
+   
+<!-- finish exe code for tabs content -->
+    <div class="exe_continue_next" type="1" style="display:none;">
+       <button>
+         <img src="<?php echo $this->getSkinUrl('images/exe_next_btn.gif');?>" alt="Submit"
+                  onmouseover="this.src='<?php echo $this->getSkinUrl('images/exe_next_btn_hover.gif');?>';"
+                  onmouseout="this.src='<?php echo $this->getSkinUrl('images/exe_next_btn.gif');?>';">
+       </button>
+    </div>
+    
+</div>
+<!-- finish tab 3 -->
+
+
+
+      <div class="tab-content" id="tab-4">
+	   	<?php echo Mage::registry('current_product')->getDescription();?>  
+	   	<div id="grammar_end"></div>	      
+      </div>
+      <div class="tab-content" id="tab-5">
+		<div id="skype">
+			<h3>１）マンツーマンレッスン</h3>
+			<div class="photo_right"><img src="<?php echo $this->getSkinUrl('images/skype_title1.gif');?>" /></div>
+			<p>「他の人の前でしゃべっているのを聞かれるのが恥ずかしい」という国民性からか、日本人には人気のレッスンです。
+			モバイル中国語教室のレッスンも当然すべてがマンツーマン。あなたのペースで、あなたのための中国語レッスンが受けられます。</p>
+			<h3>２）通学不要で受講時間も自由！ビジネスマンにも最適！</h3>
+			<div class="photo_right"><img src="<?php echo $this->getSkinUrl('images/skype_title2.gif');?>" /></div>
+			<p>忙しい時間の合間を縫って受講が可能です。オンライン中国語レッスンなら当然通学が不要で、時間も学校が開いている時間であれば自分の都合に合わせて受講することができます。
+			多忙なビジネスマンの方でも、出勤前の早朝や帰宅後の深夜の時間帯を活用すれば無理なく中国語学習が続けられます。</p>
+			<h3>３）オンラインスクールの教師について</h3>
+			<div class="photo_right"><img src="<?php echo $this->getSkinUrl('images/skype_title3.gif');?>" /></div>
+			<p>日本語堪能な中国人教師がレッスンを提供しています。中国語が全く喋れない方でも発音（ピンイン・四声）から分かりやすくレッスンを受けることが出来ます。</p>
+			<div class="skype_contact">
+				<div class="skype_button"><a href="<?php echo Mage::getBaseUrl().'contacts';?>">skypeレッスンのお問合せはこちら</a></div>
+			</div>	 
+		</div>
+      </div>
+      <div class="tab-content" id="tab-6"></div>
+      <div class="tab-content" id="tab-7"></div>
+	</div><!--End tab-panel-->
+	

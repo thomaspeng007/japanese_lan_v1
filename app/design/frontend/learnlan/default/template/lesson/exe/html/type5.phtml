@@ -1,0 +1,233 @@
+<?php
+$lessonId = $this->getProductId();
+// Initialise ExeType model
+$exeM = Mage::getModel('lesson/jpexetype');
+// Set lesson id
+$exeM->setLessonId($this->getProductId());
+// Return type 1
+$type5 = $exeM->getType(5);
+//var_dump($type3);
+$countType5 = count($type5);
+?> 
+<script>
+$( document ).ready(function() {
+	
+
+	var sinoApp = sinoApp || {};
+
+    // Flashcard will be the default exercise, other exercise will 
+    // have different names
+    
+    ens = $('.exe_next_serial');
+    	ens.click(function (e) {
+        	// serial is a string before convert to number
+    		serial = $(this).attr('serial').trim();
+  
+    		$('#exe_type_serial_' + serial).hide(); 
+       	    $('#exe_type_serial_' + serial).html(''); 
+            $('.exe_next_serial').hide(); 
+            
+       	   // !important Convert string serial to number with parseInt function
+       	   next = parseInt(serial) + 1;
+       	   $('#exe_type_serial_' + next).show(); 
+
+            
+    	});
+    	// Count how many serial number of type3 
+    	<?php echo 'var countSerial = '.json_encode($countType5).';'; ?>
+    
+    sinoApp.exe_grammar_type5 = function() {
+
+        exe_grammar_pinyin_frame = $('.exe_grammar_pinyin_frame');
+      
+        //Declare hanji text
+        var hanjiCharsUpdate = '';
+        //I for indicator of how many hanji
+        i = 0;
+    	j = 0; 
+                 
+        exe_grammar_pinyin_frame.click(function (e) { 
+
+        	serial = $(this).attr('serial').trim();
+        	
+        		pinyinAnswerId = $('#exe_grammar_question_keyword_' + serial);
+                pinyin = pinyinAnswerId.attr('pinyin');
+                //Convert pinyin to arrary
+                pinyinChars = pinyin.split("");
+                hanji = pinyinAnswerId.attr('answer');
+                //Convert hanjis to array
+                hanjiChars = hanji.split("");
+                countHanji = hanjiChars.length;
+
+              //Get selected value
+              selectedLetter = $(this).attr('value');           
+              //If selected is the correct one
+              if(selectedLetter==pinyinChars[j]){
+            	  j++ ;
+                 //Checking against typing 
+                 pinyinText = pinyinAnswerId.text(); 
+                 pinyinTextUpdate = pinyinText + selectedLetter;
+                 pinyinChars.splice(0,1); 
+                 //If convert to Hanji if applicable             
+                 if(selectedLetter == "1" || selectedLetter == "2" ||
+                    selectedLetter == "3" || selectedLetter == "4") {
+                    hanjiCharsUpdate = hanjiCharsUpdate + hanjiChars[i];
+                    pinyinTextUpdate = hanjiCharsUpdate;                
+                    i++; 
+                 }
+                 //Update text
+                 pinyinAnswerId.text(pinyinTextUpdate); 
+                 //If completed
+                 //alert("countHanji=" + countHanji);
+                 //alert("i=" + i);
+                 if(countHanji == i){
+                	keyword = $('#exe_grammar_question_keyword_' + serial);
+                	keyword.removeClass('exe_grammar_question_keyword')
+                    pinyinAnswerId.addClass('exe_grammar_frame_wrapper_green');
+                    setTimeout(function(){
+                    pinyinAnswerId.removeClass("exe_grammar_frame_wrapper_green");}, 1000);
+                    $('.exe_grammar_answer_container').text(''); 
+                    //Display 'Continue Next' button
+                    // Empty serial number div and display the next if availalbe
+                    if(serial<countSerial) {
+   
+                        $('#exe_next_serial_' + serial).show(); 
+                        //Declare hanji text
+                        hanjiCharsUpdate = '';
+                        j = 0;
+                        i = 0;
+                     
+                    } else { // if it's last srial number then Go to next type
+                	
+                        $('.exe_next_serial_container').hide();
+                        $('.exe_continue_next').show(); 
+                    }
+                 }
+                
+                  
+              } else {
+                   //Warning if not didn't click correct tone
+                  if(pinyinChars[j].match(/[^a-z]/)){
+                     alert("正しい声調を選択して下さい");      
+                  }
+                   // incorrect answer
+                   // First to update the score by using ajax to update session
+               score = 1;
+               var dataString = 'score=' + score;
+               $.ajax({
+                        type: "POST",
+                        url: '<?php echo $this->getUrl("chinese-lesson/index/saveScore") ?>',
+                        data: dataString,
+                        cache: false,
+                        //success: function(response) { alert('ok'); }
+               });
+               
+                   $(this).addClass("exe_grammar_frame_wrapper_red");
+                   $(this).animate({left:'-10px'},100)
+                     .animate({left:'10px'},100)
+                     .animate({left:'0px'},100);
+                   setTimeout(function(){
+                   exe_grammar_pinyin_frame.removeClass("exe_grammar_frame_wrapper_red");}, 500);  
+                  
+              }            
+       }); // finish click event  
+    };
+     
+    sinoApp.exe_grammar_type5();
+    
+
+    
+
+
+});
+
+</script>
+<div id="exe_container">
+    <p class="exe_type_title"><?php echo $exeM->getTypeTitle(5); ?></p><br>
+    <?php for($i=0; $i<$countType5; $i++) { 
+
+	      $serialNumber = trim($i + 1); 
+	      $type    = $type5[$i];
+          $source  = $exeM->convertTextSource($type['source']);
+          $target  = $type['target']; 
+          $keyword = $type['exe_type5'];
+          $pinyin  = $exeM->getPinyinFromSource($keyword);
+          $exeGrammarQuestion = str_replace($keyword, 
+                                            '<span id="exe_grammar_question_keyword_'.$serialNumber.'"
+                                                   class="exe_grammar_question_keyword" 
+                                                   pinyin='.$pinyin.' 
+                                                   answer='.$keyword.'></span>',
+                                            $source);	
+    ?>
+     <div id="exe_type_serial_<?php echo $serialNumber; ?>" 
+               <?php if($serialNumber!=1) { echo "style='display:none'"; } ?> >           
+    <div id="exe_grammar_pinyin_frame_container">
+       <div id="exe_grammar_question_trans" class="exe_grammar_question_trans" >
+           <p><?php echo $target; ?></p>
+       </div>
+        <div id="exe_grammar_question">
+            <p class="exe_grammar_question_p">
+              <?php echo $exeGrammarQuestion; ?>
+            </p>
+        </div>
+        
+    </div>
+   
+    
+     <hr></hr> 
+    <div class="exe_grammar_pinyin_container">   
+        <div class="exe_tone_group">
+            <div class="exe_grammar_pinyin_frame" serial="<?php echo $serialNumber; ?>"  value="1">1 ¯</div>
+            <div class="exe_grammar_pinyin_frame" serial="<?php echo $serialNumber; ?>"  value="2">2 ´</div> 
+            <div class="exe_grammar_pinyin_frame" serial="<?php echo $serialNumber; ?>"  value="3">3 ˇ</div>
+            <div class="exe_grammar_pinyin_frame" serial="<?php echo $serialNumber; ?>"  value="4">4 `</div> 
+        </div>
+    <div class="exe_letter_group">
+            <div class="exe_grammar_pinyin_frame" serial="<?php echo $serialNumber; ?>"  value="q">Q</div>
+            <div class="exe_grammar_pinyin_frame" serial="<?php echo $serialNumber; ?>"  value="w">W</div>
+            <div class="exe_grammar_pinyin_frame" serial="<?php echo $serialNumber; ?>"  value="e">E</div>
+            <div class="exe_grammar_pinyin_frame" serial="<?php echo $serialNumber; ?>"  value="r">R</div>
+            <div class="exe_grammar_pinyin_frame" serial="<?php echo $serialNumber; ?>"  value="t">T</div>
+            <div class="exe_grammar_pinyin_frame" serial="<?php echo $serialNumber; ?>"  value="y">Y</div>
+            <div class="exe_grammar_pinyin_frame" serial="<?php echo $serialNumber; ?>"  value="u">U</div>
+            <div class="exe_grammar_pinyin_frame" serial="<?php echo $serialNumber; ?>"  value="i">I</div>
+            <div class="exe_grammar_pinyin_frame" serial="<?php echo $serialNumber; ?>"  value="o">O</div>
+            <div class="exe_grammar_pinyin_frame" serial="<?php echo $serialNumber; ?>"  value="p">P</div>
+    </div>
+    <div class="exe_letter_group">
+            <div class="exe_grammar_pinyin_frame" serial="<?php echo $serialNumber; ?>"  value="a">A</div>
+            <div class="exe_grammar_pinyin_frame" serial="<?php echo $serialNumber; ?>"  value="s">S</div>
+            <div class="exe_grammar_pinyin_frame" serial="<?php echo $serialNumber; ?>"  value="d">D</div>
+            <div class="exe_grammar_pinyin_frame" serial="<?php echo $serialNumber; ?>"  value="f">F</div>
+            <div class="exe_grammar_pinyin_frame" serial="<?php echo $serialNumber; ?>"  value="g">G</div>
+            <div class="exe_grammar_pinyin_frame" serial="<?php echo $serialNumber; ?>"  value="h">H</div>
+            <div class="exe_grammar_pinyin_frame" serial="<?php echo $serialNumber; ?>"  value="j">J</div>
+            <div class="exe_grammar_pinyin_frame" serial="<?php echo $serialNumber; ?>"  value="k">K</div>
+            <div class="exe_grammar_pinyin_frame" serial="<?php echo $serialNumber; ?>"  value="l">L</div>
+    </div> 
+    <div class="exe_letter_group">       
+            <div class="exe_grammar_pinyin_frame" serial="<?php echo $serialNumber; ?>"  value="z">Z</div> 
+            <div class="exe_grammar_pinyin_frame" serial="<?php echo $serialNumber; ?>"  value="x">X</div>
+            <div class="exe_grammar_pinyin_frame" serial="<?php echo $serialNumber; ?>"  value="c">C</div> 
+            <div class="exe_grammar_pinyin_frame" serial="<?php echo $serialNumber; ?>"  value="v">V</div>
+            <div class="exe_grammar_pinyin_frame" serial="<?php echo $serialNumber; ?>"  value="b">B</div> 
+            <div class="exe_grammar_pinyin_frame" serial="<?php echo $serialNumber; ?>"  value="n">N</div>
+            <div class="exe_grammar_pinyin_frame" serial="<?php echo $serialNumber; ?>"  value="m">M</div> 
+    </div>
+    
+        
+    </div><!-- finish exe_grammar_correct_answer_container -->
+</div>   
+
+    <div class="exe_next_serial_container">
+        <div style="display:none;" id="exe_next_serial_<?php echo $serialNumber; ?>" class="exe_next_serial" serial="<?php echo $serialNumber; ?>"  >
+           <button>
+               <img src="<?php echo $this->getSkinUrl('images/exe_next_btn.gif');?>" alt="Submit"
+                  onmouseover="this.src='<?php echo $this->getSkinUrl('images/exe_next_btn_hover.gif');?>';"
+                  onmouseout="this.src='<?php echo $this->getSkinUrl('images/exe_next_btn.gif');?>';">
+           </button>
+        </div>
+    </div>
+     <?php } ?> 
+    
+</div><!-- finish exe_contaier -->    

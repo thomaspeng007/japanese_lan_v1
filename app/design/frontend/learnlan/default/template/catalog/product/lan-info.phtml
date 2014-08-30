@@ -1,0 +1,33 @@
+
+<div id="sidebar02">
+	<div id="sidebar03">
+		<img src="<?php
+		$_product = Mage::registry('current_product');
+		echo $this->helper('catalog/image')->init($_product, 'image');
+		//echo Mage::registry('current_product')->getImageUrl();	
+		?>" class="box">
+	</div><!--End sidebar03-->
+	<?php $tags = $_product->getShortDescription();
+	      $tags = explode('|', $tags);
+	?>
+    <div id="sidebar04" class="box">
+		<ul>
+			<li class="sidebar04_title"><?php echo $_product->getName()?></li>
+			<li>公開日<span class="sidebar04_open"><?php echo Mage::app()->getLocale()->date(strtotime($_product->getCreatedAt()), null, null, false)->toString('yyyy.MM.dd');?></span></li>
+			<li class="sidebar04_tag"><div class="tag_name">タグ</div>
+			         <?php foreach ($tags as $tag):?>
+			        <ul>			           
+			            <li><?php echo $tag?></li>      
+			        </ul>
+			        <?php endforeach;?>
+			        
+			</li>
+			<li class="sidebar04_sns">
+			   <!--  hide this div for the time being, reopen when we get our facebook page, then change the url to ours
+               <div class="fb-like" data-href="http://www.google.com" data-layout="standard" data-action="like" data-show-faces="true" data-share="true"></div>
+               -->
+            </li>
+		</ul>
+	</div>
+</div>
+

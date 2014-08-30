@@ -1,0 +1,45 @@
+<?php echo $this->getChildHtml('auth-redirect'); //this code prevent not logged-in users ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $this->getLang() ?>" lang="<?php echo $this->getLang() ?>">
+<head>
+<?php echo $this->getChildHtml('head') ?>
+</head>
+<body>
+<!-- For facebook like button
+     Hide it for now
+-->
+<!--  
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.0";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));
+</script>
+-->
+<!-- Finish facebook like button -->
+    <div id="wrapper">
+        <div id="header">
+            <?php echo $this->getChildHtml('header'); ?>
+        </div>  
+        <div id="contents">
+            <div id="sidebar">
+	            <?php echo $this->getChildHtml('left'); ?>	
+            </div>
+            <div id="main">
+                <?php echo $this->getChildHtml('lan.top-productmenu'); ?>
+                <?php echo $this->getChildHtml('breadcrumbs'); ?>
+                <?php echo $this->getChildHtml('lan.pagenav')?>
+ 	            <?php echo $this->getChildHtml('content'); ?>
+ 	           
+        	</div>
+        </div>
+        <div id="footer">
+            <?php echo $this->getChildHtml('footer'); ?>
+        </div>
+    </div>
+</body>
+</html>
+

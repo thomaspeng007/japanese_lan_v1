@@ -1,0 +1,81 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2013 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+/* @var $this Mage_Reports_Block_Product_Viewed */
+?>
+<?php 
+$customerId = Mage::getSingleton('customer/session')->getId();
+// initialise customerlesson model
+$clM = Mage::getModel('lesson/jpcustomerlesson');
+$clM->setCustomerId($customerId);
+$favorites = $clM->getCustomerFavorite();
+
+// get full product url with category ID and product ID
+function getFullProductCategoryUrl($currentProduct) {
+   if($currentProduct){
+   	   $pid = $currentProduct->getId();
+       $cats = $currentProduct->getCategoryIds();
+       // get the most closest cate ID of the current product
+       $deepestLevelCateId = max($cats);
+       // get product base category which means, beginner or primary or same level category
+       $baseCate = Mage::getModel('catalog/category')
+                 ->load($deepestLevelCateId)
+                 ->getParentCategory();
+       return Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB)."index.php/catalog/product/view/id/".$pid."/category/".$baseCate->getId()."/";
+   
+   }
+}
+
+?>
+<?php if ($_products = $this->getRecentlyViewedProducts()): ?>
+<div class="tab-panel">
+		<div class="tab-content active" id="tab-1">
+		    <?php foreach ($_products as $_item): ?>
+		    <?php $_product = Mage::getModel('catalog/product')->load($this->helper('catalog/output')->productAttribute($_item, $_item->getId() , 'id'));?>  
+			<div class="restart"><img src="<?php echo $this->helper('catalog/image')->init($_product, 'image')?>" />
+				<ul>				   
+					<!-- <li>入門　＞</li><li>セッション1</li> -->
+					<li class="restart_title"><a href="<?php echo getFullProductCategoryUrl($_product); ?>">「<?php  echo $_product->getName();?>」</a><div class="restart_btn"><a href="<?php echo getFullProductCategoryUrl($_product); ?>">学習開始<img src="<?php echo $this->getSkinUrl('images/list_style.png');?>" /></a></div></li>
+
+				</ul>
+			</div>
+			<?php //break;
+				  endforeach; ?>
+		</div>
+		
+		<div class="tab-content" id="tab-2">
+		     <?php foreach ($favorites as $favorite): ?>
+		    <?php $_product = Mage::getModel('catalog/product')->load($favorite);?>  
+			<div class="restart"><img src="<?php echo $this->helper('catalog/image')->init($_product, 'image')?>" />
+				<ul>
+					<!-- <li>入門　＞</li><li>セッション1</li> -->
+					<li class="restart_title"><a href="<?php echo $_product->getProductUrl() ?>">「<?php echo $_product->getName() ;?>」</a><div class="restart_btn"><a href="<?php echo $_product->getProductUrl() ?>">学習開始<img src="<?php echo $this->getSkinUrl('images/list_style.png');?>" /></a></div></li>
+				    
+				</ul>
+			</div>
+			<?php endforeach; ?><!--End tab-2-->
+			</div>
+	</div><!--End tab-panel-->
+<?php endif; ?>

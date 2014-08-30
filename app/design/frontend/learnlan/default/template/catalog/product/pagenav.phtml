@@ -1,0 +1,38 @@
+<?php $currentProductId = Mage::registry('current_product')->getId() ?>
+<?php      
+      $deepestLevelCate = Mage::registry('deepestlevel_cate');
+     
+			    $products = Mage::getModel('catalog/product')->getCollection() 
+                                              ->addCategoryFilter($deepestLevelCate)
+                                              ->addAttributeToSelect(array('id', 'name'));
+                       $productTotal = count($products);
+                       $i = 0;             
+                       foreach ($products as $product) {
+                              if ($currentProductId==$product->getId()){ 
+                              	  // First find out the pointer
+                                  $previous_i = $i - 1;
+                                  $next_i = $i + 1;
+                                  break;
+                              }
+                              $i++;
+                       }
+                       unset($i);
+                       $j = 0;
+                       // Based on pointer to assign products
+                       foreach($products as $product) {
+                       	     if($j==0) { $firstProduct = $product; }
+                       	     if($j==$previous_i) { $previousProduct = $product; }
+                             if($j==$next_i) { $nextProduct = $product; }   
+                             if($j== $productTotal - 1) { $lastProduct = $product; }    	     
+                       	     $j++;
+                       }
+                       unset($j);	
+?>
+<span class="main02_2">
+<?php if($currentProductId!=$firstProduct->getId()): ?>
+<a href="<?php echo $previousProduct->getProductUrl()?>" >
+<div id="lesson_prev"><p>＜ 前の課へ</p></div><div id="lesson_prev_s"><p>＜</p></div></a><?php endif;?><?php if($currentProductId!=$lastProduct->getId()): ?>
+<a href="<?php echo $nextProduct->getProductUrl()?>" ><div id="lesson_next"><p>次の課へ ＞</p></div><div id="lesson_next_s"><p>＞</p></div></a>
+<?php endif;?>
+</span>
+<?php unset($products); unset($firstProduct); unset($lastProduct); ?>
