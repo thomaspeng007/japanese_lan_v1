@@ -58,6 +58,9 @@
                        <jpcustomerlesson>
                            <table>jp_customer_lesson</table>
                        </jpcustomerlesson>
+                       <jppricing>
+                           <table>jp_pricing</table>
+                       </jppricing>
                    </entities>
              </lesson_resource>
         </models>
@@ -73,6 +76,17 @@
                 <class>Chinese_Lesson_Helper</class>
             </lesson>
         </helpers>
+        <events>
+            <sales_order_place_after>
+                <observers>
+                    <update_order_expire_date>
+                        <type>singleton</type>
+                        <class>lesson/observer</class>
+                        <method>updateOrderHistory</method>
+                    </update_order_expire_date>
+                </observers>
+            </sales_order_place_after>
+        </events>
     </global> 
      <adminhtml>
         <layout>

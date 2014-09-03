@@ -169,4 +169,20 @@ class Chinese_Lesson_Model_Observer
 	{
 		return "observer";
 	}
+	
+	public function updateOrderHistory($observer) {
+		/***
+		$observer->getEvent()->getOrder()->getIncrementId() 
+		$orderId = $observer->getEvent()->getOrder()->getId();
+		$orders = Mage::getModel('sales/order')
+                    ->getCollection()
+                    ->addFieldToSelect('increment_id')
+                    ->addFieldToFilter('customer_id', array('eq' => $observer->getEvent()->getOrder()->getId()));
+        ***/
+        $orderId = $observer->getEvent()->getOrder()->getIncrementId();
+        $customerId = Mage::getSingleton('customer/session')->getCustomer()->getId();
+        $pricing = Mage::getModel('lesson/jppricing');
+        $pricing->initialOrder($customerId, $orderId)->setOrder();
+        return ;
+	}
 }

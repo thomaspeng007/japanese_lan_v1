@@ -24,9 +24,14 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<?php $helper = Mage::helper("lesson/pricing")?>
 <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
 <?php $_orders = $this->getOrders(); ?>
+<?php 
+$pricing = Mage::getModel('lesson/jppricing');
+$customerId = Mage::getSingleton('customer/session')->getCustomer()->getId();
+$historyArr = $pricing->getOrderHistory($customerId);
+//var_dump($historyArr); exit;
+?>
 <!--  <div class="page-title">
     <h1><?php echo $this->__('My Orders') ?></h1>
 </div>-->
@@ -43,7 +48,8 @@
         <tr>
             <th><?php echo $this->__('ご注文番号') ?></th>
             <th><?php echo $this->__('日付') ?></th>
-            <!--  <th><?php echo $this->__('Ship To') ?></th>-->
+            <th><?php echo $this->__('Expire Date') ?></th>
+            <th><?php echo $this->__('Status') ?></th>
             <th><span class="nobr"><?php echo $this->__('金額') ?></span></th>
             <th><span class="nobr"><?php echo $this->__('状態') ?></span></th>
             <th>&nbsp;</th>
@@ -55,7 +61,8 @@
         <tr>
             <td><?php echo $_order->getRealOrderId() ?></td>
             <td><span class="nobr"><?php echo $this->formatDate($_order->getCreatedAtStoreDate()) ?></span></td>
-            <td><?php echo $helper->getProductInterval($_order->getRealOrderId())->setProductExpireDate($this->formatDate($_order->getCreatedAtStoreDate()))?></td>
+            <td><?php echo $this->formatDate($historyArr[$_order->getRealOrderId()]['expireDate']);?></td>
+            <td><?php echo $historyArr[$_order->getRealOrderId()]['status'];?></td>
             <td><?php echo $_order->formatPrice($_order->getGrandTotal()) ?></td>
             <td><em><?php echo $_order->getStatusLabel() ?></em></td>
             <td class="a-center">
