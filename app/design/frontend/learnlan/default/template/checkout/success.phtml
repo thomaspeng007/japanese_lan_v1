@@ -37,7 +37,7 @@
     <p><?php echo $this->__('ご注文番号: %s.', sprintf('<a href="%s">%s</a>', $this->escapeHtml($this->getViewOrderUrl()), $this->escapeHtml($this->getOrderId()))) ?></p>
 <?php endif;?>
     <p><?php echo $this->__('ご注文内容を記載しましたメールをお送りしましたのでご確認下さい。') ?></p>
-<?php if ($this->getCanViewOrder() && $this->getCanPrintOrder()) :?>
+<?php if (!$this->getCanViewOrder() && $this->getCanPrintOrder()) :?>
     <p>
         <?php echo $this->__('Click <a href="%s" onclick="this.target=\'_blank\'">here to print</a> a copy of your order confirmation.', $this->getPrintUrl()) ?>
         <?php echo $this->getChildHtml() ?>
