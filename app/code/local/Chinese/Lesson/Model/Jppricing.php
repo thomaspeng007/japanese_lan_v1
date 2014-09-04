@@ -96,9 +96,9 @@ class Chinese_Lesson_Model_Jppricing extends Mage_Core_Model_Abstract
 	    	foreach($historyObj as $obj) {
 	    		
 	    		if((int)$obj->getStatus() ==1) {
-	    			$status = 'New'; // new
+	    			$status = '新規'; // new
 	    		} else {
-	    			$status = 'Extend'; // extend
+	    			$status = '延長'; // extend
 	    		}	
 	    		$historyArr[$obj->order_id] = array('status'=>$status, 'expireDate'=>$obj->getExpire_date());
 	    	}
