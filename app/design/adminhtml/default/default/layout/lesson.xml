@@ -1,0 +1,18 @@
+<layout>
+    <adminhtml_catalog_product_edit>
+        <reference name="product_tabs">
+            <action method="addTab">
+                <name>dialogue</name>
+                <block>lesson/adminhtml_catalog_product_tab_dialogue</block>
+            </action>
+            <action method="addTab">
+                <name>vocabulary</name>
+                <block>lesson/adminhtml_catalog_product_tab_vocabulary</block>
+            </action>
+            <action method="addTab">
+                <name>exepreview</name>
+                <block>lesson/adminhtml_catalog_product_tab_exepreview</block>
+            </action>
+        </reference>
+    </adminhtml_catalog_product_edit>
+</layout>

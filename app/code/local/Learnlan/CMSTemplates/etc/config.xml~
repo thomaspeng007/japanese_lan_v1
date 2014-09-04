@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<config>
+  <modules>
+    <Learnlan_CMSTemplates>
+      <version>0.1.0</version>
+    </Learnlan_CMSTemplates>
+  </modules>
+  <global>
+    <page>
+      <layouts>
+        <learnlan_two_columns translate="label">
+          <label>Vacancy Two-Column Layout</label>
+          <template>page/vacancy-2columns.phtml</template>
+          <layout_handle>vacancy_two_columns</layout_handle>
+        </learnlan_two_columns>
+      </layouts>
+    </page>
+  </global>
+</config>

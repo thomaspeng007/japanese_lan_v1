@@ -1,0 +1,122 @@
+<?php
+/**
+ * Custom Import lesson template
+ */
+$base_path = Mage::getBaseDir('media');
+$destination = $base_path."/import/";
+
+// initialise dialogue model
+$dialogueM = Mage::getModel('lesson/jpdialogue');
+$vocabularyM = Mage::getModel('lesson/jpvocabulary');
+$lessonM = Mage::getModel('lesson/jpproductlesson');
+
+// initialise producctlesson model
+
+
+?>
+
+<?php 
+if ($_FILES["file"]["error"] > 0)
+		{
+			echo "Error: " . $_FILES["file"]["error"] . "<br>";
+		}
+		else
+		{
+			$file = $_FILES["file"]["name"];
+			echo "Upload: " . $_FILES["file"]["name"] . "<br>";
+			echo "Type: " . $_FILES["file"]["type"] . "<br>";
+			echo "Size: " . ($_FILES["file"]["size"] / 1024) . " kB<br>";
+			echo "Temp file: " . $_FILES["file"]["tmp_name"] . "<br>";
+			echo "Stored in: " . $_FILES["file"]["tmp_name"];
+			move_uploaded_file($_FILES["file"]["tmp_name"],
+			                   $destination . $_FILES["file"]["name"]); // move file from temp to destination
+		
+		
+			echo "Stored in: " . $destination . $_FILES["file"]["name"];
+		}
+		
+		// read content from upload CSV file
+		$file = $destination . $_FILES["file"]["name"];
+		// Create Vocabulary array
+		$voArray = array(); 
+		$row = 1;
+		if (($handle = fopen($file, "r")) !== FALSE) {
+			while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
+				// number of fields per line
+				$num = count($data);
+				echo "<p> $num fields in line $row: <br /></p>\n";
+				$row++;
+				
+				// casting lesson ID to Integer
+				$lessonId = preg_replace("/[^0-9]/","", $data[0]);
+				$lessonId = (int) $lessonId;
+				
+				// if not 0 it means start from a new lesson, the $lessonId will always be integer and > 0
+				if(!$lessonId==0) {
+				   // Check if lesson ID has already existed in DB, if yes exit
+				   if(!$lessonM->is_lessonidExist($lessonId))
+			       {
+				       exit;
+			       }
+				   $real_lessonId = $lessonId;
+				   $displayOrder = 0;
+				   $tags = $data[1];
+				   $title = $data[2];
+				   
+				    // create downloadable products on the fly
+				   $helper = Mage::helper('lesson/createproduct');
+				   $helper->sku = $real_lessonId."-".$title;			 
+				   $helper->typeId = 'downloadable'; // set as default
+				   $helper->name = $title;	
+				   $helper->description = $title;	
+				   $helper->shortDescription = $tags;
+		           $helper->createProduct();
+		           $product_id = $helper->getId(); // get prodcut ID and pass to match lesson ID
+				   
+				   // initialise product-lesson model
+				   $lessonM = Mage::getModel('lesson/jpproductlesson');
+				   $lessonM->setProduct_id($product_id)
+				           ->setLesson_id($lessonId)
+			               ->setLesson_title($title)
+			               ->save();
+				   
+				   // output in browser
+				   echo "lesson id: ".$lessonId;
+				   echo ", tags: ".$tags;
+				   echo ", title: ".$title."<br>";
+				}
+				else {
+				
+				    $displayOrder++;
+			     	$actor = $data[0];
+				    $source = $data[1];
+				    $target = $data[3];
+				    $targetV = $data[4];
+				    
+				    // Initialise dialogue model
+				    $dialogueM = Mage::getModel('lesson/jpdialogue');
+				    $dialogueM->setLesson_id($real_lessonId)
+				              ->setDisplay_order($displayOrder)
+				              ->setActor($actor)
+				              ->setSource($source)
+				              ->setTarget($target)
+				              ->save();
+				    
+				    // push all the vocabulary separated by lesson id into voArray
+				    $voArray[$real_lessonId][$displayOrder] = array($source => $targetV);
+				    
+				    // output in browser
+				    echo "lesson id: ".$lessonId;
+			        echo "display order: ".$displayOrder;
+				    echo ", actor: ".$actor;
+			     	echo ", source: ".$source;
+				    echo ", target: ".$target."<br>";	    
+				}
+					
+			}// End of while
+			// Close file, resouce not available anymore
+			fclose($handle);		
+	        // Process and insert into vocabulary into DB
+			$vocabularyM->processV($voArray);
+	  }
+?>

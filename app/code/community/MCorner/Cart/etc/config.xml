@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<config>
+   <modules>
+      <MCorner_Cart>
+         <version>0.0.1</version>
+      </MCorner_Cart>
+   </modules>
+   <frontend>
+      <events>
+         <checkout_cart_add_product_complete>
+            <observers>
+               <mcorner_cartbypass_observer>
+                  <type>singleton</type>
+                  <class>MCorner_Cart_Model_Observer</class>
+                  <method>afterAddToCart</method>
+               </mcorner_cartbypass_observer>
+            </observers>
+         </checkout_cart_add_product_complete>
+      </events>
+   </frontend>
+</config>

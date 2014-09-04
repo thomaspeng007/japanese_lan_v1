@@ -1,0 +1,79 @@
+<?php
+/**
+ * Custom tab vocabulary template
+ */
+
+// initialise dialogue model
+$dialogueM = Mage::getModel('lesson/jpdialogue');
+// initialise productlessmon model
+$productlessonM = Mage::getModel('lesson/jpproductlesson');
+// Retrieve current product ID
+$product_id = $productlessonM->getCurrentProductId();
+// Retrieve co-reponding lesson ID if exists
+$lesson_id = $productlessonM->getLessonId();
+if(!$lesson_id){ $lesson_id ="No matching"; }
+
+?>
+
+<div class="entry-edit">
+    <div class="entry-edit-head">
+        <h4 class="icon-head head-edit-form fieldset-legend">Dialogue Information (<?php echo "Prodcut ID: ".$product_id; ?> , <?php echo "Lesson ID: ".$lesson_id;?>)</h4>
+    </div>
+    
+    <div class="fieldset fieldset-wide">
+    <div class="hor-scroll">
+         <?php 
+         // hide vocabulary information if there is no lesson id match current loading product
+         if($productlessonM->isMatch()) {
+         ?>
+         <table style="width:100%" >
+            <tbody>   
+               <tr>
+                  <th>Uid</th>
+                  <th>Type3<br>(相近词)</th>
+                  <th>Type4<br>(排句)</th>
+                  <th>Type5<br>(拼音)</th>
+                  <th>Actor</th>
+                  <th>Chinese</th>                 
+                  <th>Japanese</th>
+                  <th>Sound of Chinese</th>
+               </tr>    
+               <?php                                    
+               // Retrieve all vocabularies from current lesson 
+               $dialogues = $dialogueM->getDialogue();
+               
+               $i = 0;
+               foreach($dialogues as $dialogue) {
+                   $id = $i + 1;
+                   $primary_id = "dailogue_primary_id".$i;
+                   $actor = "jp_dailogue_actor".$i; 
+                   $source = "jp_dailogue_source".$i; 
+                   $source_id = "jp_dailogue_source".$i;
+                   $target = "jp_dailogue_target".$i; 
+                   $target_id = "jp_dailogue_target".$i;  
+                   
+                            
+               ?>
+               <tr>
+                  <td><?php echo $dialogue->getId(); ?><input type="hidden" name="<?php echo $primary_id; ?>" value="<?php echo $dialogue->getId(); ?>" /></td>                     
+                  <td><input type="text" class="input-text"  name="<?php echo 'exe_type3'.$i; ?>"  value="<?php echo $dialogue->getExe_type3();?>" ></td>
+                  <td><input type="checkbox" name="<?php echo 'exe_type4'.$i; ?>"  value="1" <?php if($dialogue->getExe_type4()!=NULL){ echo 'checked'; }  ?> ></td>
+                  <td><input type="text" class="input-text"  name="<?php echo 'exe_type5'.$i; ?>"  value="<?php echo $dialogue->getExe_type5();?>" ></td>
+                  <td><input type="text" class="input-text" name="<?php echo $actor; ?>" id="<?php echo $actor; ?>" value="<?php echo $dialogue->getActor();?>" /></td>
+                  <td><input type="text" class="input-text" name="<?php echo $source; ?>" id="<?php echo $source_id; ?>" value="<?php echo $dialogue->getSource();?>" /></td>
+                  <td><input type="text" class="input-text" name="<?php echo $target; ?>" id="<?php echo $target_id; ?>" value="<?php echo $dialogue->getTarget();?>" /></td>
+                  <td><input type="button" value="<?php echo ($dialogueM->isAudioExist($lesson_id,$id))? 'play' : 'missing'; ?>" /></td>
+               </tr>
+               <?php 
+               $i++;
+               } // finish loop
+               ?>
+            </tbody>
+         </table>
+         <?php 
+             } // show/hide vocabulary information
+       else { echo "No information. Please assign product to a lesson ID."; }    
+            ?>          
+     </div>
+     </div>
+</div>	

@@ -1,0 +1,8 @@
+<config>
+    <modules>
+        <Chinese_Lesson>
+            <active>true</active>
+            <codePool>local</codePool>
+        </Chinese_Lesson>
+    </modules>
+</config> 

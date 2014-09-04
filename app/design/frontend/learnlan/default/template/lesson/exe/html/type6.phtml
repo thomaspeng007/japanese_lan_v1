@@ -1,0 +1,104 @@
+<?php
+//Pass over lesson id and type id
+$lessonId = $this->getProductId();
+$typeId = (int)$this->getFinalType($typeId);
+$OrigProductId = $this->getOrigProductId();
+//Initialise jpexetype model
+$exeM = Mage::getModel('lesson/jpexetype');
+// Set lesson id
+$exeM->setLessonId($lessonId);
+//Total correct exercises for all types
+$totalScore = $exeM->getTotalTypeCount();
+//Record all the score for mistakes
+$getScore = Mage::getSingleton('core/session')->getExeScoreValue();
+//Final socre in percentage
+$finalPercent = ( (int)$totalScore - (int)$getScore ) / (int)$totalScore;
+
+//echo "getScore:".$getScore." | "."finalPercent:".$finalPercent." | "."typeId:".$typeId." | "."finalId:".$exeM->getFinalType()." | "."totalScore:".$totalScore;
+//Mage::getSingleton('core/session')->unsExeScoreValue();
+//exit;
+
+if($finalPercent >= 0.8 ) { 
+   $evaluation = 'verygood';
+} elseif($finalPercent >= 0.5 && $finalPercent < 0.8) {
+   $evaluation = 'good'; 
+} elseif($finalPercent > 0 && $finalPercent < 0.5) {
+   $evaluation = 'bad';
+} else { $evaluation = 'verybad'; }
+
+switch ($evaluation) {
+  case "verygood":
+    echo '
+         <div id="evaluation" class="eva1">
+	     大変良く出来ました!!<img src="'.$this->getSkinUrl("images/verygood.jpg").'" />
+         </div>
+    ';
+    break;
+  case "good":
+    echo '
+         <div id="evaluation" class="eva2">
+	     良く出来ました!<img src="'.$this->getSkinUrl("images/good.jpg").'" />
+         </div>
+    ';
+    break;
+  case "bad":
+    echo '
+         <div id="evaluation" class="eva3">
+	         がんばりましょう<img src="'.$this->getSkinUrl('images/bad.jpg').'" />
+         </div>
+    ';
+    break;
+  case "verybad":
+    echo '
+         <div id="evaluation" class="eva4">
+	     間違えすぎです<img src="'.$this->getSkinUrl('images/verybad.jpg').'". />
+         </div>
+    ';
+}
+?>
+<?php if($evaluation != 'verybad'): ?>
+<div id="schoor_display">
+	正解率<span class="display_large"><?php echo round($finalPercent, 2)*100;?>%</span>
+</div>
+<?php endif;?>
+
+<div class="btn_jump">
+	<div class="btn_jump_ret">
+		もう一度練習<img src="<?php echo $this->getSkinUrl('images/icn_pra.png');?>" />
+	</div>
+	<div class="btn_jump_gra">
+		文法に進む<img src="<?php echo $this->getSkinUrl('images/icn_gra.png');?>" />
+	</div>
+</div>
+   <script type="text/javascript">
+$( document ).ready(function() {
+
+   $(".btn_jump_ret").click(function(){ 
+	   $('#loadingDiv').show();  
+	   type = 1;
+	   $("#tab-3-wrapper").load(    
+			    '<?php echo $this->getUrl("chinese-lesson/index/index") ?>',
+			    {type:type, productId:<?php echo $OrigProductId ?>},
+			    function(responseTxt,statusTxt,xhr){
+				    if(statusTxt=="success")
+				       $('#loadingDiv').hide();
+				      //alert("External content loaded successfully!");
+				    if(statusTxt=="error")
+				      alert("Error: "+xhr.status+": "+xhr.statusText);
+			});
+	   next = type + 1;
+	   type =  $('.exe_continue_next').attr('type', next).trim();
+	  
+   });
+
+   $(".btn_jump_gra").click(function(){
+   	  $("#tabs_gra").trigger("click");
+   });
+});
+
+<?php
+//Unset score session only the type is the last type
+if($typeId==$exeM->getFinalType()){
+Mage::getSingleton('core/session')->unsExeScoreValue();
+}
+?>

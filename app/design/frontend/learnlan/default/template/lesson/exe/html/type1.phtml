@@ -1,0 +1,123 @@
+<?php 
+/**
+ * Calling type1 function from Exe Obj
+ * @return Array
+ * sample: Array ( [0] => Array ( [source] => 你好 [target] => こんにちは [pinyin] => ni3 hao3 )
+ *                 [1] => Array ( [source] => 我 [target] => 私 [pinyin] => wo3 ) 
+ *                 [2] => Array ( [source] => 叫 [target] => ～という [pinyin] => jiao4 ) 
+ *                 [3] => Array ( [source] => 李明 [target] => 李明 [pinyin] => li3 ming2 ) )
+ */
+$lessonId = $this->getProductId();
+// Initialise ExeType model
+$exeM = Mage::getModel('lesson/jpexetype');
+// Set lesson id
+$exeM->setLessonId($this->getProductId());
+// Return type 1
+$type1 = $exeM->getType(1);
+// Return all source only from type 1
+$type1_source = $exeM->getSourceArr($type1,1);
+// Return random source as the first source
+$type1_ran_source = $exeM->getRandomSource($type1_source);
+
+?>
+<script>
+$( document ).ready(function() {
+var sinoApp = sinoApp || {};
+
+// Flashcard will be the default exercise, other exercise will 
+// have different names
+sinoApp.exe_flashcard_type1 = function() {
+    	
+    //var questions = new Array("你好","我","叫","李明");
+    
+    <?php echo 'var questions = '.json_encode($type1_source); ?>
+   
+    ifc =  $('#exe_image_frame_container'); 
+    image_frame = $('.exe_image_frame');  
+   
+    image_frame.click(function (e) {     
+          
+          // find out question value
+          qValue = $('#exe_display_question').attr('answer').trim();
+          // find out selected value
+          value = $(this).attr('answer').trim();
+          wrapper = $(this).parent();
+          // compare question value and answer value, if equal change
+          // next question value
+          if(value==qValue){
+             // use green color to highlight the correct answer
+             wrapper.addClass("exe_image_frame_green");
+             setTimeout(function(){
+            	 wrapper.removeClass("exe_image_frame_green");}, 500);             
+             // find out the position of given Q in the array
+             total = questions.length;
+             var i=0; var spot;
+             while(i<total){
+                if(questions[i]==qValue ) { spot = i; }
+                i++;
+             }
+             questions.splice(spot,1);
+              if(total-1>0){       
+                  $('#exe_display_question>p').text(questions[0].trim());
+                  $('#exe_display_question').attr('answer',questions[0].trim());
+              } else {
+                  $('#exe_display_question').hide();
+                  $('.exe_continue_next').show();
+              }
+          } else {
+               // incorrect answer
+               // First to update the score by using ajax to update session
+               score = 1;
+               var dataString = 'score=' + score;
+               $.ajax({
+                        type: "POST",
+                        url: '<?php echo $this->getUrl("chinese-lesson/index/saveScore") ?>',
+                        data: dataString,
+                        cache: false,
+                        //success: function(response) { alert('ok'); }
+               });
+               
+               wrapper.addClass("exe_image_frame_red");
+               wrapper.animate({left:'-10px'},100)
+                 .animate({left:'10px'},100)
+                 .animate({left:'0px'},100);
+               setTimeout(function(){
+            	   wrapper.removeClass("exe_image_frame_red");}, 300);      
+          }            
+   }); // finish click event  
+};
+ 
+sinoApp.exe_flashcard_type1();
+
+});
+</script>
+
+<div id="exe_container">
+    <div id="exe_image_frame_container" class="exe_image_frame_container">
+        <p class="exe_type_title"><?php echo $exeM->getTypeTitle(1); ?></p>
+        <?php  //echo "<h1>lesson: ".$exeM->lesson_id."</h1>"; echo "<h1>current_product: ".Mage::registry('current_product')."</h1>";
+        foreach($type1_source as $type1_source_v) { 
+       	       $type1_target  = $exeM->getValueFromSource($type1_source_v, $type1, 'target');
+       	       $type1_ran_uid = $exeM->getValueFromSource($type1_source_v, $type1, 'id');
+       	       $type1_pinyin  = $exeM->getValueFromSource($type1_source_v, $type1, 'pinyin');
+       	       $type_img_path = $exeM->getImageUrl().str_replace(' ', '', $type1_pinyin).'.gif';      
+       	?>
+       
+            <div class="exe_image_frame_wrapper" uid="<?php echo $type1_ran_uid; ?>">
+            <div class="exe_image_frame" answer="<?php echo $type1_source_v; ?>" >
+                 <img class="exe_image" alt="" src="<?php echo $type_img_path;?>">
+            </div>
+            </div>
+              
+         <?php 
+         }
+         ?>
+    </div>   
+    <div class="exe_question_container">
+        <div id="exe_display_question" type="1" class="exe_display_question" answer="<?php echo $type1_ran_source;?>">
+            <p ><?php echo $type1_ran_source;?></p>
+        </div>
+       
+ 
+    </div>  
+</div><!-- finish exe_contaier -->    

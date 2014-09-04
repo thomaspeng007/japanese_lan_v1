@@ -1,0 +1,133 @@
+<?php
+/**
+ * Custom tab vocabulary template
+ */
+
+// initialise vacobulary model
+$vocabularyM = Mage::getModel('lesson/jpvocabulary');
+// initialise productlessmon model
+$productlessonM = Mage::getModel('lesson/jpproductlesson');
+// initialise exeTypes model
+$exetypeM = Mage::getModel('lesson/jpexetype');
+// Retrieve current product ID
+$product_id = $productlessonM->getCurrentProductId();
+// Retrieve co-reponding lesson ID if exists
+$lesson_id = $productlessonM->getLessonId();
+$exetypeM->setLessonId($lesson_id);
+if(!$lesson_id){ $lesson_id ="No matching"; }
+?>
+
+<div class="entry-edit">
+    <div class="entry-edit-head">
+        <h4 class="icon-head head-edit-form fieldset-legend">Vocabulary Information (<?php echo "Prodcut ID: ".$product_id; ?> , <?php echo "Lesson ID: ".$lesson_id;?>)</h4>
+    </div>
+    
+    <div class="fieldset fieldset-wide">
+    <div class="hor-scroll">
+         <?php 
+         // hide vocabulary information if there is no lesson id match current loading product
+         if($productlessonM->isMatch()) {
+         ?>
+         <table style="width:100%" >
+            <tbody>   
+               <tr>
+                  <th>Uid</th>
+                  <th>Type1<br>(flashcard)</th>
+                  <th>Type2<br>(listening)</th>
+                  <th>Chinese</th>                 
+                  <th>Japanese</th>
+                  <th>Pin Yin</th>
+                  <th>Sound of Chinese</th>
+               </tr>    
+               <?php                                    
+               // Retrieve all vocabularies from current lesson 
+               $vocabularies = $vocabularyM->getVocabulary();
+               
+               $i = 0;
+               foreach($vocabularies as $vocabulary) {
+            
+                   $source = "jp_source".$i; 
+                   $source_id = "jp_source".$i;
+                   $target = "jp_target".$i; 
+                   $target_id = "jp_target".$i;
+                   $pinyin = "jp_pinyin".$i; 
+                   $pinyin_id = "jp_pinyin".$i;    
+                   $primary_id = "primary_id".$i;
+                   $uid = $vocabulary->getUid();
+                   $audiofilename = str_replace(' ', '', $vocabulary->getPinyin());
+           
+               ?>
+               <tr>
+                  <td><?php if($uid == NULL){ echo $vocabulary->getId()."(new)"; }else{ echo $uid; } ?> <input type="hidden" name="<?php echo $primary_id; ?>" value="<?php echo $vocabulary->getId(); ?>" /></td>                     
+                  <td><input type="checkbox" name="<?php echo 'exe_type1'.$i; ?>" value="1" <?php if($vocabulary->getExe_type1()!=NULL){ echo 'checked'; }  ?> ></td>
+                  <td><input type="checkbox" name="<?php echo 'exe_type2'.$i; ?>" value="1" <?php if($vocabulary->getExe_type2()!=NULL){ echo 'checked'; }  ?>></td>
+                  <td><input type="text" class="input-text" name="<?php echo $source; ?>" id="<?php echo $source_id; ?>" value="<?php echo $vocabulary->getSource();?>" /></td>                 
+                  <td><input type="text" class="input-text" name="<?php echo $target; ?>" id="<?php echo $target_id; ?>" value="<?php echo $vocabulary->getTarget();?>" /></td>
+                  <td><input type="text" class="input-text" name="<?php echo $pinyin; ?>" id="<?php echo $pinyin_id; ?>" value="<?php echo $vocabulary->getPinyin();?>" /></td>
+                  <td><input type="button" value="<?php echo ($vocabularyM->isAudioExist($lesson_id,$audiofilename))? 'play' : 'missing'; ?>" /></td>
+               </tr>
+               <?php 
+               $i++;
+               } // finish loop
+               ?>
+            </tbody>
+         </table>
+         
+         
+            <!-- Display Exe type table -->
+          <table>
+             <tbody>   
+               <tr><td><h3>Type 1 flashcard</td></h3></tr>
+               <tr>   
+                  <th>Uid</th>          
+                  <th>Source</th>
+                  <th>Target</th>
+                  <th>Pin Yin</th>
+               </tr>    
+               <?php 
+                  // Retrieve all vocabularies from current lesson and given type
+                  $exetypes = $exetypeM->getExeTypes(); 
+                  //set 4 as per exe type group
+                  $setCount = 8;
+                  // If empty means first time to setup exe_type, below code will be used once only
+                  if($exetypeM->isExist()==FALSE){
+                       
+                     for($j=0;$j<$setCount;$j++){
+                        if($j==4){ echo "<tr><td><h3>Type 2 listening</h3></td></tr>"; }
+                     ?> 
+                        <tr>
+                           <td></td>
+                           <td><input type="text" class="input-text" name="<?php echo 'type_source_'.$j; ?>" ></td>
+                           <td><input type="text" class="input-text" name="<?php echo 'type_target_'.$j; ?>" ></td>
+                           <td><input type="text" class="input-text" name="<?php echo 'type_pinyin_'.$j; ?>" ></td>
+                        </tr> 
+                     <?php 
+                     }
+                  } 
+                  else { // Data have already existed in DB
+                     $l = 0;    
+                      foreach ($exetypes as $exetype) {       
+                         if($l==8) { break; }
+                          if($l==4){ echo "<tr><td><h3>Type 2 listening</h3></td></tr>"; }       
+               ?>
+                          <tr>
+                             <td><input type="hidden" name="<?php echo 'type_primary_id_'.$l; ?>" value="<?php echo $exetype->getId(); ?>" /><?php echo $exetype->getId(); ?></td>
+                             <td><input type="text" class="input-text" name="<?php echo 'type_source_'.$l; ?>" value="<?php  echo $exetype->getSource(); ?>"></td>
+                             <td><input type="text" class="input-text" name="<?php echo 'type_target_'.$l; ?>" value="<?php  echo $exetype->getTarget(); ?>"></td>
+                             <td><input type="text" class="input-text" name="<?php echo 'type_pinyin_'.$l; ?>" value="<?php  echo $exetype->getPinyin(); ?>"></td>
+                          </tr>
+                          
+               <?php 
+                      $l++;
+                      } 
+                  }
+               ?>        
+            </tbody>  
+         </table>
+         <?php 
+             } // show/hide vocabulary information
+       else { echo "No information. Please assign product to a lesson ID."; }    
+            ?>          
+     </div>
+     </div>
+</div>

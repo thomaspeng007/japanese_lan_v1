@@ -1,0 +1,70 @@
+<?php
+/*
+ * http://fishpig.co.uk - Magento Tutorials
+ *
+ * Display top level categories and
+ * subcategories of the current category
+ *
+**/
+?>
+<?php //$_helper = Mage::helper('catalog/category') ?>
+<?php //$_categories = $_helper->getStoreCategories() ?>
+<?php //$currentCategory = Mage::registry('current_category') ?>
+<?php //$_category = Mage::getModel('catalog/category')->load($currentCategory->getId()) ?>
+<?php //$_subcategories = $_category->getChildrenCategories() ?>
+<?php 
+// get category id each session course, which is the thrid level category
+// presume that any product belongs to only one category, otherwise this code will fail
+$currentProductId = Mage::registry('current_product')->getId();
+$currentProduct = Mage::registry('current_product');
+if($currentProduct){
+   $cats = $currentProduct->getCategoryIds();
+   // get the most closest cate ID of the current product
+   $deepestLevelCateId = max($cats);
+   if($deepestLevelCateId){
+   	  $deepestLevelCate = Mage::getModel('catalog/category')->load($deepestLevelCateId);
+   	  if(Mage::registry('deepestlevel_cate')){
+   	  	 if($deepestLevelCate->getId()!==Mage::registry('deepestlevel_cate')->getId()){
+   	  	 	Mage::unregister('deepestlevel_cate');
+   	  	 	Mage::register('deepestlevel_cate', $deepestLevelCate);
+   	  	 }
+   	  }else{
+   	     Mage::register('deepestlevel_cate', $deepestLevelCate);
+   	     $_category = Mage::getModel('catalog/category')->load(4);
+   	     if(!Mage::registry('current_category')){
+   	     Mage::register('current_category', $_category);
+   	     }
+   	  }
+   }
+}
+?>
+<div class="main01">
+	<div class="main01_1"><?php echo $deepestLevelCate->getName()?></div>
+		<div class="main01_2">
+			<ul>
+				<?php  $products = Mage::getModel('catalog/product')->getCollection() 
+                                                                     ->addCategoryFilter($deepestLevelCate)
+                                                                     ->addAttributeToSelect(array('id', 'name'));    
+                       $i = 0;               
+                       foreach ($products as $product): ?>     
+                                <?php $i++; ?>       
+                                <li <?php if ($currentProductId==$product->getId()){ echo 'class="list_active"'; }?> ><a href="<?php echo $product->getProductUrl()?>"><?php echo $i ;?></a></li>
+                        <?php endforeach; unset($i);   ?>                      
+			         </ul>
+		        </div>
+		  
+	<!-- for mobile navigation -->
+    <div class="main01_1_s"><?php echo $deepestLevelCate->getName()?></div>
+    <div class="main01_2_s">	    
+	    <ul>
+		    <?php  $products = Mage::getModel('catalog/product')->getCollection() 
+                                                                ->addCategoryFilter($deepestLevelCate)
+                                                                ->addAttributeToSelect(array('id', 'name')); 
+                   $i = 0;                     
+                   foreach ($products as $product): ?> 
+                            <?php $i++; ?>
+                            <li <?php if ($currentProductId==$product->getId()){ echo 'class="list_active"'; }?> ><a href="<?php echo $product->getProductUrl()?>"><?php echo $i ;?></a></li>
+                   <?php   endforeach; ?>                      
+	    </ul>      
+    </div>
+</div><!--End main01-->

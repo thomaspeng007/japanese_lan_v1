@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<config>
+    <menu>
+        <lesson translate="title" module="lesson">
+            <title>Chinese</title>
+            <sort_order>100</sort_order>
+            <children>
+                <productlesson translate="title" module="lesson">
+                    <title>Lesson</title>
+                    <sort_order>0</sort_order>
+                    <action>adminhtml/lesson_index</action>
+                </productlesson>
+            </children>
+            <children>
+                <importlesson translate="title" module="lesson">
+                    <title>Import Lesson</title>
+                    <sort_order>0</sort_order>
+                    <action>adminhtml/lesson_import</action>
+                </importlesson>
+            </children>
+        </lesson>
+    </menu>
+</config>
