@@ -319,7 +319,19 @@ One page checkout main layout
        </reference>
        
     </checkout_onepage_index>
+    
+<!-- 
+Checkout cart page:
+ -->    
  
+   <checkout_cart_index translate="label">
+       
+        <!-- Mage_Checkout -->
+        <reference name="root">
+            <action method="setTemplate"><template>page/learnlan-2columns.phtml</template></action>
+        </reference>
+        
+    </checkout_cart_index>
 <!--
 sales layout for: order_history || order_view
 -->
