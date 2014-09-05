@@ -25,12 +25,15 @@
  */
 ?>
 <div class="page-title">
-    <h1><?php echo $this->__('Shopping Cart is Empty') ?></h1>
+    <h1><?php echo $this->__('ご購入ありがとうございます。') ?></h1>
 </div>
 <div class="cart-empty">
     <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
     <?php echo $this->getChildHtml('checkout_cart_empty_widget'); ?>
-    <p><?php echo $this->__('You have no items in your shopping cart.') ?></p>
-    <p><?php echo $this->__('Click <a href="%s">here</a> to continue shopping.', $this->getContinueShoppingUrl()) ?></p>
+    <p><?php echo $this->__('※プレミアム会員の期限延長は、再度お申込み頂くと利用期限が延長されます。') ?></p>
+    <p><a href="<?php echo Mage::getBaseUrl().'customer/account/index';?>">ダッシュボード</a>に戻る<p>
+    <!--
+    <p><?php //echo $this->__('<a href="%s">ダッシュボード</a>に戻る', $this->getContinueShoppingUrl()) ?></p>
+    -->
     <?php echo $this->getChildHtml('shopping.cart.table.after'); ?>
 </div>
