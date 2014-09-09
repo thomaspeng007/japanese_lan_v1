@@ -17,7 +17,8 @@ $staff   = Mage::getSingleton('cms/page')->getIdentifier();
 			<ul>
 				<li><a href="<?php echo Mage::getBaseUrl().'customer/account/index';?>"><img src="<?php echo $this->getSkinUrl('images/icn_home.png');?>" /><span class="header-menu-char">ホーム</span></a></li> 
 				<li><a href="<?php echo Mage::getBaseUrl().'learnlan/beginner.html';?>"><img src="<?php echo $this->getSkinUrl('images/icn_course.png');?>" /><span class="header-menu-char">コース</span></a></li> 
-				<li><a href="<?php echo Mage::getBaseUrl().'payment';?>"><img src="<?php echo $this->getSkinUrl('images/icn_price.png');?>" /><span class="header-menu-char">お申込み</span></a></li> 
+				<li><a href="<?php echo Mage::getBaseUrl().'payment';?>"><img src="<?php echo $this->getSkinUrl('images/icn_price.png');?>" /><span class="header-menu-char">お申込み</span></a></li>
+				<li><a href="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'blog';?>"  target="_blank"><img src="<?php echo $this->getSkinUrl('images/icn_blog.png');?>" /><span class="header-menu-char">ブログ</span></a></li>
 				<!-- <li><a href=""><img src="<?php //echo $this->getSkinUrl('images/icn_help.png');?>" /><span class="header-menu-char">ヘルプ</span></a></li> -->
 			</ul>
 		</div>
