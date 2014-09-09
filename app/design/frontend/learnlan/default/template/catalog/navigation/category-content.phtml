@@ -35,6 +35,14 @@ $currentCatId = Mage::getModel('catalog/layer')->getCurrentCategory()->getId();
 			</li>
 			<?php endforeach;?>			
 		</ul>
+	</div>	
+	<div id="mobile_beforelesson">
+		<ul>
+			<li class="title" >学習前に</li>
+			<li class="chinese <?php if(strstr($_SERVER["PHP_SELF"], "chinese")      !=False) {echo "active" ;}?>"><a href="<?php echo Mage::getBaseUrl().'chinese';      ?>">１.中国語</a></li>
+			<li class="pronunciation <?php if(strstr($_SERVER["PHP_SELF"], "pronunciation")!=False) {echo "active" ;}?>"><a href="<?php echo Mage::getBaseUrl().'pronunciation';?>">２.発音</a></li>
+			<li class="tone <?php if(strstr($_SERVER["PHP_SELF"], "tone")         !=False) {echo "active" ;}?>"><a href="<?php echo Mage::getBaseUrl().'tone';         ?>">３.四声</a></li>
+		</ul>
 	</div>
 	
 	

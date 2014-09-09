@@ -1,0 +1,9 @@
+<div id="sidebar_beforelesson">
+	<ul>
+		<li class="title" >学習を始める前に</li>
+		<li class="detail <?php if(strstr($_SERVER["PHP_SELF"], "chinese")      !=False) {echo "active" ;}?>"><a href="<?php echo Mage::getBaseUrl().'chinese';      ?>"><img src="<?php echo $this->getSkinUrl('images/icn_num1.png');?>" />中国語の特徴</a></li>
+		<li class="detail <?php if(strstr($_SERVER["PHP_SELF"], "pronunciation")!=False) {echo "active" ;}?>"><a href="<?php echo Mage::getBaseUrl().'pronunciation';?>"><img src="<?php echo $this->getSkinUrl('images/icn_num2.png');?>" />発音</a></li>
+		<li class="detail <?php if(strstr($_SERVER["PHP_SELF"], "tone")         !=False) {echo "active" ;}?>"><a href="<?php echo Mage::getBaseUrl().'tone';         ?>"><img src="<?php echo $this->getSkinUrl('images/icn_num3.png');?>" />四声</a></li>
+	</ul>
+</div>
+

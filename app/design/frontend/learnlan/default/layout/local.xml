@@ -135,7 +135,11 @@ Customer account home dashboard layout
                 <block type="customer/account_dashboard_address" name="customer_account_dashboard_address" as="address" template="customer/account/dashboard/address.phtml"/>
             </block>
         </reference>
-
+        <reference name="left">
+            <block type="page/html" name="beforelesson" template="catalog/navigation/beforelesson.phtml">
+                <label>Sidebar BeforeLesson</label>
+            </block>
+        </reference>
     </customer_account_index>
 
 
@@ -171,6 +175,12 @@ Category layered navigation layout
                 <label>Main Content Area</label>
             </block>
         </reference>
+        <reference name="left" >
+            <block type="page/html" name="beforelesson" template="catalog/navigation/beforelesson.phtml">
+                <label>Sidebar BeforeLesson</label>
+            </block>
+        </reference>
+        
         <!-- 
         Finish code modified by LearnLan
         -->
@@ -214,6 +224,7 @@ Product view Modified by LearnLan
             <!-- <action method="addItem"><type>js</type><name>calendar/calendar.js</name><params/><if/><condition>can_load_calendar_js</condition></action>-->
             <!-- <action method="addItem"><type>js</type><name>calendar/calendar-setup.js</name><params/><if/><condition>can_load_calendar_js</condition></action>-->
         </reference>
+        
         <reference name="left">
             <block type="catalog/product_view" name="lan.product.info" template="catalog/product/lan-info.phtml">
                 <label>Left Product Information</label>

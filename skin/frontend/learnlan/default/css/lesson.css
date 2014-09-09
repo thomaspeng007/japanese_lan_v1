@@ -946,6 +946,7 @@ h3.beforelesson_title {
 	font-family:Meiryo;
 	text-align:left;
 	text-shadow:2px 2px #FFF;
+	display:inline;
 }
 h3.beforelesson_title img {padding-right:10px;}
 
@@ -954,8 +955,9 @@ h3.beforelesson_title img {padding-right:10px;}
 	border-radius:4px;
 	border: 1px solid #C1C1C1;
 	padding:15px;
-	margin-bottom: 50px;
+	margin: 5px 0 50px 0;
 }
+.subtitle_contents .link {font-size:14px;display:block;text-align:center;}
 h4.topic {
 	font-size:18px;
 	font-weight:bold;
@@ -969,10 +971,10 @@ h4.topic {
 .topic_contents img {padding-top:10px;text-align:center;}
 span.add_deco1 {font-weight:bold;color:#FF3300;}
 span.add_deco2 {font-weight:bold;font-size:16px;}
-.topic_contents tablex {
-	border-collapse:separate;
-	border-spacing:5px;
-}
+span.add_deco3 {border-bottom:solid 1px #000066;}
+
+.topic_contents img.audio:hover {cursor:pointer;}
+
 .topic_contents table td {padding:8px 5px;vertical-align: middle;}
 .topic_contents table td img {padding:3px 0 0 10px;}
 .topic_contents table td.title_line {border-bottom:dotted 2px #333;font-weight:bold;text-align:center;}
@@ -985,8 +987,38 @@ span.add_deco2 {font-weight:bold;font-size:16px;}
 	padding-left:25px;margin-top:20px;
 	font-weight:bold;font-size:16px;
 }
+.topic_contents h5 span {font-size:15px;color:#0000FF;font-weight:normal;}
+.topic_contents table.muyin_list , .topic_contents table.ziyin_list {
+	border:solid 1px #000;margin:10px 0 0 10px;float:left;
+}
+.topic_contents table.muyin_list caption , .topic_contents table.ziyin_list caption {
+	font-size:17px;font-weight:bold;
+	text-align:center;
+}
+.topic_contents table.muyin_list td , .topic_contents table.ziyin_list td {
+	width:60px;height:13px;line-height:13px;
+	text-align:center;
+	border:solid 1px #000;
+}
+.topic_contents table.ziyin_list:after {clear:both;}
+.topic_contents table.fayin_list  {
+	border:solid 1px #000;margin:10px 0 0 10px;
+}
+.topic_contents table.fayin_list td {
+	border:solid 1px #000;
+}
+.topic_contents table.fayin_list td.yin {
+	width:40px;text-align:center;
+}
+.topic_contents table.ziyin_detail {
+	border:solid 1px #000;margin:10px 0 0 10px;float:left;
+}
+.topic_contents table.ziyin_detail td {text-align:center;border:solid 1px #000;}
+.topic_contents table.ziyin_detail td.name {width:200px;}
+.topic_contents table.ziyin_detail td.name span {font-weight:bold;font-size:16px;}
 
 /*** sidebar_lessonbefore ***/
+.beforelesson_breadcrumbs{display:none;font-size:14px;font-weight:bold;}
 #sidebar_beforelesson ul{
 	padding:0px;
 	list-style-position: outside;
@@ -1029,6 +1061,31 @@ span.add_deco2 {font-weight:bold;font-size:16px;}
 	vertical-align:middle;
 }
 #sidebar_beforelesson ul li.detail:hover {background-color: #9F9F9F;}
+
+#mobile_beforelesson{display:none;}
+#mobile_beforelesson ul {
+	display:inline-block;
+	width:100%;
+}
+#mobile_beforelesson ul li{
+	display:inline-block;
+	float:left;
+	border:solid 1px #FFF;
+	background-color:#FFF;
+	width:24.8%;height:40px;
+	line-height:40px;
+	margin-rightx:0.5%;
+	font-size:14px;font-weight:bold;
+	margin-right:0.5%;text-align:center;
+}
+#mobile_beforelesson ul li.title{width:20%;border:solid 0px #AAA;background-color:transparent;color:#860000;font-size:15px;}
+#mobile_beforelesson ul li.chinese       {background-color:#FFC30C;}
+#mobile_beforelesson ul li.pronunciation {background-color:#67A8F9;}
+#mobile_beforelesson ul li.tone          {background-color:#F96767;}
+
+
+#mobile_beforelesson ul li.mobile_menu_active{background-color:#9F9F9F;}
+#mobile_beforelesson ul li a{display:block;	text-decoration:none;color:#000;}
 
 
 
@@ -1247,6 +1304,7 @@ div.regular-price .total_price {
 	font-size:15px;
 	font-weight:bold;
 	text-align:center;
+	line-height:20px;
 }
 div.regular-price div.course_name {
 	margin-top:15px;
@@ -1255,6 +1313,7 @@ div.regular-price div.course_name {
 	font-family:meiryo;
 	color:#066BCC;
 	text-align:center;
+	line-height:60px;
 }
 div.regular-price div.course_name .course_name_char {
 	font-size:15px;
@@ -1267,6 +1326,7 @@ div.regular-price div.montly_detail {
 	font-size:20px;
 	font-weight:bold;
 	text-align:center;
+	line-height:60px;
 }
 div.regular-price div.montly_detail .montly_price {
 	font-size:35px;
@@ -1497,6 +1557,10 @@ li#billing-new-address-form .fields {margin-top:10px;}
 	#pricing_side {display:none;}
 	#pricing_main h1 {font-size: 20px;}
 	#checkout-step-billing, #checkout-step-payment , #checkout-review-load {padding-left:20px;}
+	/*** BeforeLesson ***/
+	.beforelesson_breadcrumbs{display:inline;}
+	#mobile_beforelesson{display:block;}
+	#sidebar_beforelesson{display:none;}
 }
 
 
@@ -1750,9 +1814,9 @@ li#billing-new-address-form .fields {margin-top:10px;}
 	div.actions div.btn-cart {width:124px;height:34px;background-image:url(../images/btn_AddPremium_s.png);}
 	div.actions div.btn-cart:hover {background-image:url(../images/btn_AddPremium_s_o.png);}
 	div.regular-price .total_price {font-size:12px;}
-	div.regular-price div.course_name {font-size:26px;}
+	div.regular-price div.course_name {font-size:26px;line-height:40px;}
 	div.regular-price div.course_name .course_name_char {font-size:12px;}
-	div.regular-price div.montly_detail {font-size:12px;}
+	div.regular-price div.montly_detail {font-size:12px;line-height:30px;}
 	div.regular-price div.montly_detail .montly_price {font-size:24px;}
 	/*** Pricing page2 ***/
 	#main_checkout {width:98%;margin-bottom:10px;margin:0 2px;}
@@ -1761,4 +1825,10 @@ li#billing-new-address-form .fields {margin-top:10px;}
 	#pricing_main h1 {font-size: 20px;}
 	#checkoutSteps li {width:98%;}
 	#checkout-step-billing, #checkout-step-payment , #checkout-review-load {padding-left:10px;}
+	/*** BeforeLesson ***/
+	.beforelesson_breadcrumbs{display:inline;}
+	#mobile_beforelesson{display:block;}
+	#sidebar_beforelesson{display:none;}	
+	.topic_contents {padding-left:5px;}
+	.topic_contents table.ziyin_detail td.name {width:140px;}
 }
